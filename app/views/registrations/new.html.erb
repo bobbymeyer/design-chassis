@@ -1,0 +1,16 @@
+<% content_for :title, "Open the chassis" %>
+
+<header>
+  <h1 class="page-title">Open the chassis</h1>
+  <p class="lede">Nobody has an account yet, so this one is yours. The door shuts behind it.</p>
+</header>
+
+<%= its_swiss_form_with model: @user, url: registration_path, scope: :user do |form| %>
+  <%= render "its_swiss/shared/errors", record: @user %>
+
+  <%= form.email_field :email_address, label: "Email", required: true, autofocus: true,
+        autocomplete: "username" %>
+  <%= form.password_field :password, label: "Password", required: true,
+        autocomplete: "new-password", maxlength: 72, hint: "Eight characters at least. Nothing else is asked of it." %>
+  <%= form.submit "Open the chassis" %>
+<% end %>
