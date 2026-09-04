@@ -19,6 +19,10 @@ gem "stimulus-rails"
 gem "its-swiss", "~> 0.7"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
+
+# The tools. Each is a Rails engine packaged as a gem; lib/chassis/engines.rb
+# says where each is mounted. From git until each has a release.
+gem "pandatone", github: "bobbymeyer/pandatone", branch: "engine"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 

@@ -22,9 +22,12 @@ class Chassis::EnginesTest < ActiveSupport::TestCase
     assert_not_includes Chassis::Engines.all.map(&:path), "/"
   end
 
-  test "the list is empty until the first engine is extracted" do
-    # Step 2 of the migration replaces this test with the first real mount.
-    assert Chassis::Engines.empty?
+  test "the first mount is Pandatone, at /pandatone" do
+    mount = Chassis::Engines.all.first
+
+    assert_equal "Pandatone", mount.name
+    assert_equal "/pandatone", mount.path
+    assert_equal Pandatone::Engine, mount.constant
   end
 
   test "the routes mount exactly what the list says, at the paths it says" do

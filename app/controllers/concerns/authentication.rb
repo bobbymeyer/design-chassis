@@ -31,14 +31,17 @@ module Authentication
 
     # An empty chassis has nobody to sign in as, so the first visitor is sent
     # to make the account rather than to a form that could never admit them.
+    #
+    # Through main_app, because this runs inside an engine's controllers as
+    # well as the chassis's own, and there the bare helpers are the engine's.
     def request_authentication
       session[:return_to_after_authenticating] = request.url
 
-      redirect_to User.none? ? new_registration_path : new_session_path
+      redirect_to User.none? ? main_app.new_registration_path : main_app.new_session_path
     end
 
     def after_authentication_url
-      session.delete(:return_to_after_authenticating) || root_url
+      session.delete(:return_to_after_authenticating) || main_app.root_url
     end
 
     def start_new_session_for(user)

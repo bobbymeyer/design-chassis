@@ -20,7 +20,7 @@ module Chassis
     end
 
     ALL = [
-      # Mount.new(name: "Pandatone", path: "/pandatone", engine: "Pandatone::Engine"),
+      Mount.new(name: "Pandatone", path: "/pandatone", engine: "Pandatone::Engine")
     ].freeze
 
     def self.all = ALL

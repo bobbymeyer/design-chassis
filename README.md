@@ -12,10 +12,11 @@ rules; this file is how to run it.
 ## Running it
 
 ```sh
-bin/setup           # gems, database
+bin/setup                 # gems, database
+bin/rails pandatone:seed  # a small, real palette library to look at
 bin/rails server
-bin/rails test:all  # unit, integration and system tests
-bin/ci              # what CI runs: style, audits, brakeman, tests
+bin/rails test:all        # unit, integration and system tests
+bin/ci                    # what CI runs: style, audits, brakeman, tests
 ```
 
 The first visit to an empty chassis makes the account. There is one, and the
@@ -24,6 +25,10 @@ are eight characters at least and nothing else is asked of them. "Forgot your
 password" needs mail — point `config.action_mailer.smtp_settings` at whatever
 you run; until then, reset in `bin/rails console`.
 
+The account page carries the API token every mounted tool's API takes, as
+`Authorization: Bearer <token>`. Each tool describes its API at
+`<tool>/api/v1/openapi`, which is the one thing not behind the token.
+
 In development the its-swiss specimen is at `/its-swiss/specimen`.
 
 ## Where things are
@@ -31,10 +36,11 @@ In development the its-swiss specimen is at `/its-swiss/specimen`.
 | What | Where |
 | --- | --- |
 | The engine list | `lib/chassis/engines.rb` — the one place the chassis knows what it carries |
-| The bay | `/` — what is mounted, and where. Empty until the first engine arrives |
-| The door | `app/controllers/{sessions,passwords,registrations}_controller.rb`, from `bin/rails generate authentication` |
-| The shell | `app/views/layouts/application.html.erb` fills its-swiss's slots: mark, nav, footer |
-| The chassis's own CSS | `app/assets/stylesheets/theme.css`, and it should stay as short as it is |
+| The bay | `/` — what is mounted, and where |
+| The tools | `/pandatone` — Pandatone, the palette library, from the `engine` branch of `bobbymeyer/pandatone` |
+| The door | `app/controllers/{sessions,passwords,registrations}_controller.rb` for people, `api_controller.rb` for scripts, `accounts_controller.rb` for the token |
+| The shell | `app/views/layouts/application.html.erb` fills its-swiss's slots: mark, nav, footer. An engine's layout renders it and adds its `:sections` to the nav |
+| The theme | `app/assets/stylesheets/theme.css` and the typeface in the layout: Archivo, the accent, the warm greys, for every tool at once |
 | The scale it is weighed on | `test/architecture/thin_chassis_test.rb` |
 
 ## Mounting an engine
@@ -47,9 +53,14 @@ Mount.new(name: "Pandatone", path: "/pandatone", engine: "Pandatone::Engine")
 
 The routes mount it, the masthead links to it, and the bay lists it. The
 engine brings its own its-swiss dependency, its own stylesheets, its own
-migrations and its own tests; the chassis adds a gem to the Gemfile and the
-line above. Then replace the test in `test/lib/chassis/engines_test.rb` that
-asserts the list is empty with one that asserts the first mount.
+migrations and its own tests; the chassis adds a gem to the Gemfile, the line
+above, a `bin/rails db:migrate`, and a test in `test/lib/chassis/engines_test.rb`
+that asserts the mount.
+
+What an engine gets from the chassis, and all it gets: a controller to
+inherit from for its screens and one for its API, both of which decide who is
+let in; a layout to render around its pages, with a `:sections` slot in the
+nav; and a theme. Pandatone's README says the same from the other side.
 
 A gem the chassis calls but does not serve — `Pandatone.palette(id)` from a
 workflow, say — is bundled and not listed. The list is what has a page.

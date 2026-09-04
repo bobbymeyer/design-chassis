@@ -31,13 +31,19 @@ class ShellTest < ActionDispatch::IntegrationTest
     assert_select ".masthead__mark", text: /\A\s*🎛️\s*Chassis\s*\z/
   end
 
-  test "the nav is the engine list, and a way out" do
+  test "the nav is the engine list, the account, and a way out" do
     assert_select "nav.nav" do
       Chassis::Engines.all.each do |mount|
         assert_select "a[href=?]", mount.path, text: mount.name
       end
+      assert_select "a[href=?]", account_path, text: "Account"
       assert_select "form[action=?] button", session_path, text: "Sign out"
     end
+  end
+
+  test "the typeface is the chassis's, self-hosted" do
+    assert_select "link[rel=preload][as=font][href*=archivo]"
+    assert_select "style", /its-swiss-150.*archivo/m
   end
 
   test "a keyboard can skip the masthead" do

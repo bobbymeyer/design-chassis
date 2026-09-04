@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resource :registration, only: %i[ new create ], path: "sign_up", path_names: { new: "" }
 
+  # Who you are signed in as, and the credential your scripts carry. The token
+  # is its own resource because replacing it is the only thing you do to it.
+  resource :account, only: :show
+  resource :api_token, only: :update
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

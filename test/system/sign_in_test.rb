@@ -5,7 +5,7 @@ class SignInTest < ApplicationSystemTestCase
     sign_in_as users(:one)
 
     assert_selector "h1", text: "Chassis"
-    assert_selector ".empty", text: "Nothing is mounted yet"
+    assert_selector "dl.pairs a", text: "Pandatone"
 
     click_on "Sign out"
 

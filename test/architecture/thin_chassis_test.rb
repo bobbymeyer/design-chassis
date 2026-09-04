@@ -17,9 +17,14 @@ class ThinChassisTest < ActiveSupport::TestCase
       "app/models holds #{(models - AUTH_MODELS).inspect}: domain logic belongs in an engine"
   end
 
-  test "the only tables are the auth tables" do
+  # An engine's tables arrive with its migrations and carry its prefix. The
+  # chassis's own are still the two.
+  test "the only tables are the auth tables and the engines' own" do
     tables = ActiveRecord::Base.connection.tables - %w[ schema_migrations ar_internal_metadata ]
-    assert_equal %w[ sessions users ], tables.sort
+    prefixes = Chassis::Engines.all.map { |mount| mount.engine.deconstantize.constantize.table_name_prefix }
+    own = tables.reject { |table| prefixes.any? { |prefix| table.start_with?(prefix) } }
+
+    assert_equal %w[ sessions users ], own.sort
   end
 
   # The one rule: tools are called through their public interface, never
@@ -71,6 +76,7 @@ class ThinChassisTest < ActiveSupport::TestCase
     def auth_files
       %w[
         app/channels/application_cable/connection.rb
+        app/controllers/api_controller.rb
         app/controllers/concerns/authentication.rb
         app/controllers/passwords_controller.rb
         app/controllers/registrations_controller.rb

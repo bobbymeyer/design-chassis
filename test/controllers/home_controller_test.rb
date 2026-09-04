@@ -14,11 +14,13 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Chassis"
   end
 
-  test "an empty bay says so rather than showing nothing" do
+  test "the bay is a list, not an empty state, once something is mounted" do
     sign_in_as users(:one)
     get root_path
 
-    assert_select ".empty", /Nothing is mounted yet/
+    assert_select ".empty", false
+    assert_select "dl.pairs dt a[href='/pandatone']", "Pandatone"
+    assert_select "dl.pairs dd", "/pandatone"
   end
 
   test "the bay lists every mounted engine by name, linked to its path" do
