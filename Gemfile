@@ -20,9 +20,10 @@ gem "its-swiss", "~> 0.7.2"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
-# The tools. Each is a Rails engine packaged as a gem; lib/chassis/engines.rb
-# says where each is mounted. From git until each has a release.
-gem "pandatone", github: "bobbymeyer/pandatone", branch: "engine"
+# The tools. Each is a Rails engine packaged as a gem, taken from a tag of
+# its repository rather than from RubyGems; lib/chassis/engines.rb says
+# where each is mounted.
+gem "pandatone", github: "bobbymeyer/pandatone", tag: "v0.1.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 

@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/bobbymeyer/pandatone.git
-  revision: fc75390dabc2eea2bea08b83133772fedb37cedb
-  branch: engine
+  revision: cdfa6b98fe46e10f358b9809b871420d047d424a
+  tag: v0.1.0
   specs:
     pandatone (0.1.0)
       importmap-rails (>= 2.0, < 4)

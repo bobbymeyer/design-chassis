@@ -37,7 +37,7 @@ In development the its-swiss specimen is at `/its-swiss/specimen`.
 | --- | --- |
 | The engine list | `lib/chassis/engines.rb` — the one place the chassis knows what it carries |
 | The bay | `/` — what is mounted, and where |
-| The tools | `/pandatone` — Pandatone, the palette library, from the `engine` branch of `bobbymeyer/pandatone` |
+| The tools | `/pandatone` — Pandatone, the palette library, from the `v0.1.0` tag of `bobbymeyer/pandatone` |
 | The door | `app/controllers/{sessions,passwords,registrations}_controller.rb` for people, `api_controller.rb` for scripts, `accounts_controller.rb` for the token |
 | The shell | `app/views/layouts/application.html.erb` fills its-swiss's slots: mark, nav, footer. An engine's layout renders it and adds its `:sections` to the nav |
 | The theme | `app/assets/stylesheets/theme.css` and the typeface in the layout: Archivo, the accent, the warm greys, for every tool at once |
@@ -53,9 +53,10 @@ Mount.new(name: "Pandatone", path: "/pandatone", engine: "Pandatone::Engine")
 
 The routes mount it, the masthead links to it, and the bay lists it. The
 engine brings its own its-swiss dependency, its own stylesheets, its own
-migrations and its own tests; the chassis adds a gem to the Gemfile, the line
-above, a `bin/rails db:migrate`, and a test in `test/lib/chassis/engines_test.rb`
-that asserts the mount.
+migrations and its own tests; the chassis adds a gem to the Gemfile, pinned
+to a tag of the engine's repository (engines are not published to RubyGems),
+the line above, a `bin/rails db:migrate`, and a test in
+`test/lib/chassis/engines_test.rb` that asserts the mount.
 
 What an engine gets from the chassis, and all it gets: a controller to
 inherit from for its screens and one for its API, both of which decide who is

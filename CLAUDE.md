@@ -4,7 +4,7 @@ Host application for a family of small, composable design tools. Each tool is a 
 
 ## Where this repo is
 
-The first vertical slice works end to end. Pandatone is a gem-packaged mountable engine (the `engine` branch of `bobbymeyer/pandatone`), mounted at `/pandatone`, with an OpenAPI description, and the chassis calls `Pandatone.palette(id)` through the public method only (`test/integration/pandatone_test.rb`). See `README.md` for how to run it and where things live. The next engine, Stripeclub, is a separate effort.
+The first vertical slice works end to end. Pandatone is a gem-packaged mountable engine (the `v0.1.0` tag of `bobbymeyer/pandatone`; engines are not published to RubyGems), mounted at `/pandatone`, with an OpenAPI description, and the chassis calls `Pandatone.palette(id)` through the public method only (`test/integration/pandatone_test.rb`). See `README.md` for how to run it and where things live. The next engine, Stripeclub, is a separate effort.
 
 - The engine list is `lib/chassis/engines.rb`. The routes mount what it lists; the nav and the bay link to it. Nothing else reads it. An engine's migrations run with the chassis's through the engine's own initializer; nothing is copied in.
 - `test/architecture/thin_chassis_test.rb` is the scale the chassis is weighed on: only the auth models, only the auth tables plus the engines' own prefixed ones, no queries outside the auth files, no engine internals named anywhere, no color arithmetic or SVG. A failure there means a capability has gone homeless: move it into an engine, do not loosen the test.
@@ -84,11 +84,11 @@ Do **not** build a general workflow engine. A workflow is a hardcoded ordered li
 ## Migration order
 
 1. ~~`rails new` the chassis: auth, its-swiss shell, empty engine list. Thin from day one.~~ **Done.**
-2. ~~Extract **Pandatone** as a gem-packaged mountable engine (it's furthest along and everything consumes it).~~ **Done**, on the `engine` branch of `bobbymeyer/pandatone`.
+2. ~~Extract **Pandatone** as a gem-packaged mountable engine (it's furthest along and everything consumes it).~~ **Done**: tagged `v0.1.0`, taken from the tag.
 3. ~~Mount it in the chassis at `/pandatone`: one line in `lib/chassis/engines.rb`, and replace the test that asserts the list is empty with the first real mount.~~ **Done.**
 4. ~~Retrofit an **OpenAPI spec** onto Pandatone during extraction — it's the reference implementation for the tools-self-describe principle. Spec on by default.~~ **Done**: `/pandatone/api/v1/openapi`, open to anyone, held to the routes by a test.
 5. ~~Prove one consumer calling `Pandatone.palette(id)` through the public method only.~~ **Done**: `test/integration/pandatone_test.rb`.
-6. ~~**Done when:** one vertical slice works end to end.~~ **Done.** Next engine (Stripeclub) is a separate effort. Left for that effort: merge the `engine` branch and release Pandatone 0.1.0, then point the Gemfile at the release; read-only tokens, if Stripeclub still needs one, belong on the chassis's door.
+6. ~~**Done when:** one vertical slice works end to end.~~ **Done.** Next engine (Stripeclub) is a separate effort. Read-only tokens, if Stripeclub still needs one, belong on the chassis's door.
 
 No big-bang rewrite. One engine at a time.
 
