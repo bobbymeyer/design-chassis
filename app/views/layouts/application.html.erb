@@ -20,10 +20,11 @@
       this is a local tool and should render correctly with no third party
       reachable. Preloaded, and fetched in CORS mode even same-origin, hence
       crossorigin. Declared under the library's face names, after its
-      stylesheets, which is where its_swiss_typeface asks to be. %>
+      stylesheets, which is where its_swiss_typeface asks to be — and under
+      its own name, which is what a control's text is set in. %>
   <link rel="preload" href="<%= asset_path("archivo-variable-latin.woff2") %>"
         as="font" type="font/woff2" crossorigin>
-  <%= its_swiss_typeface variable: "archivo-variable-latin.woff2" %>
+  <%= its_swiss_typeface variable: "archivo-variable-latin.woff2", family: "Archivo" %>
 
   <%# The chassis's own stylesheet. The shell links the library's and stops;
       theme.css holds the accent and the grid, and nothing links it but this.

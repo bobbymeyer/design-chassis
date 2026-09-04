@@ -25,8 +25,8 @@
 
   /* --- The typeface ------------------------------------------------------
      Archivo, declared in the layout under the library's face names so every
-     baseline stays on the grid. This is what a machine with none of the
-     faces falls through to. */
+     baseline stays on the grid, and under its own name, which is what a
+     control's text is set in. This is what everything falls through to. */
   --font-family: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* --- The value scale ---------------------------------------------------

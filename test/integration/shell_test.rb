@@ -41,9 +41,10 @@ class ShellTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "the typeface is the chassis's, self-hosted" do
+  test "the typeface is the chassis's, self-hosted, under the faces and under its own name" do
     assert_select "link[rel=preload][as=font][href*=archivo]"
     assert_select "style", /its-swiss-150.*archivo/m
+    assert_select "style", /font-family: "Archivo";\n  font-weight: 100 900;\n  src: url\("[^"]*archivo/
   end
 
   test "a keyboard can skip the masthead" do

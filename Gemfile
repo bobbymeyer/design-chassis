@@ -16,7 +16,8 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # The typographic style this app is set in: the shell, the masthead, the
 # footer, the value scale [https://github.com/bobbymeyer/its-swiss]
-gem "its-swiss", "~> 0.7"
+# From git until 0.7.1 is released: controls set their text off the faces.
+gem "its-swiss", "~> 0.7", github: "bobbymeyer/its-swiss", branch: "controls-off-the-baseline"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
