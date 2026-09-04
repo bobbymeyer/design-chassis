@@ -33,6 +33,13 @@
   --line: 1.5rem;
 }
 
+/* The one picture in the chrome, and it is kept to the value scale like
+   everything else. */
+.masthead__knobs {
+  margin-inline-end: var(--space-1);
+  filter: grayscale(1);
+}
+
 /* The destinations sit beside the mark; the way out sits at the far edge.
    The nav takes the rest of the masthead so the sign-out has somewhere to
    go, which is the one line its-swiss says an application writes for this. */

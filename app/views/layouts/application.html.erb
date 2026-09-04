@@ -17,7 +17,9 @@
 <% end %>
 
 <% content_for :mark do %>
-  <%= link_to "Chassis", root_path %>
+  <%# The knobs are decoration and hidden from a screen reader: the wordmark
+      beside them already says the name. %>
+  <span class="masthead__knobs" aria-hidden="true">🎛️</span><%= link_to "Chassis", root_path %>
 <% end %>
 
 <%# The nav is the engine list. A tool that is mounted is a destination; one

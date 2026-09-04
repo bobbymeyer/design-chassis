@@ -26,6 +26,11 @@ class ShellTest < ActionDispatch::IntegrationTest
     assert_select ".masthead__mark a[href=?]", root_path, text: "Chassis"
   end
 
+  test "the mark carries the knobs, and a screen reader is spared them" do
+    assert_select ".masthead__mark .masthead__knobs[aria-hidden=true]", text: "🎛️"
+    assert_select ".masthead__mark", text: /\A\s*🎛️\s*Chassis\s*\z/
+  end
+
   test "the nav is the engine list, and a way out" do
     assert_select "nav.nav" do
       Chassis::Engines.all.each do |mount|
