@@ -1,0 +1,24 @@
+<% content_for :title, "Account" %>
+
+<header>
+  <h1 class="page-title">Account</h1>
+  <p class="lede">Signed in as <%= @user.email_address %>.</p>
+</header>
+
+<section>
+  <h2>API token</h2>
+  <p class="hint">
+    What a script sends to reach any tool's API, as
+    <code>Authorization: Bearer &lt;token&gt;</code>. Each tool describes its
+    API at <code>&lt;tool&gt;/api/v1/openapi</code>. A tool holding this can do
+    anything you can.
+  </p>
+
+  <p><%= copy_button @user.api_token %></p>
+
+  <div class="run">
+    <%= button_to "Regenerate token", api_token_path, method: :patch,
+          class: "button button--danger",
+          data: { turbo_confirm: "Every script and tool using the current token stops working until you give it the new one. Regenerate it?" } %>
+  </div>
+</section>

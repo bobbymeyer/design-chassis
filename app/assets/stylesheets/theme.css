@@ -1,0 +1,61 @@
+/* What the chassis fills in: the slots its-swiss leaves for the application.
+ *
+ * Unlayered on purpose. Everything its-swiss ships is inside a cascade layer,
+ * and an unlayered rule beats every layered one whatever its specificity — so
+ * this file wins without having to out-specify the library or reach for
+ * !important.
+ *
+ * These are the whole site's: every tool mounted here is set in the same
+ * face, on the same greys, with the same accent, because it is one
+ * application. A tool brings its own components and its own grid, never a
+ * voice. It is short, and it should stay short.
+ */
+
+:root {
+  /* --- The accent --------------------------------------------------------
+     State and emphasis only: the current destination, focus, a link, the one
+     primary action, the moment before something cannot be undone. Never a
+     filled area. The tools here are about colour, and their swatches are the
+     only filled colour on any page; the chrome stays a rule and a word.
+
+     Delete this line and read the site. If it still works, the value scale
+     is doing the work, which is the point of taking the library. */
+  --accent: #e30613;
+  --accent-ink: var(--paper);
+
+  /* --- The typeface ------------------------------------------------------
+     Archivo, declared in the layout under the library's face names so every
+     baseline stays on the grid, and under its own name, which is what a
+     control's text is set in. This is what everything falls through to. */
+  --font-family: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* --- The value scale ---------------------------------------------------
+     The library's ladder is neutral and these two turn the whole of it
+     together. A small chroma at a yellow-green hue gives the warm greys the
+     tools were drawn in. */
+  --value-chroma: 0.006;
+  --value-hue: 95;
+
+  /* --- The grid ----------------------------------------------------------
+     Six fields: halves, thirds and sixths, which is what the tools lay out
+     on. A tool that needs a second density declares it beside this one. */
+  --columns: 6;
+  --gutter: 1.5rem;
+
+  /* --- The baseline ------------------------------------------------------
+     The interval everything vertical registers to. The library's own. */
+  --line: 1.5rem;
+}
+
+/* The one picture in the chrome, and it is kept to the value scale like
+   everything else. */
+.masthead__knobs {
+  margin-inline-end: var(--space-1);
+  filter: grayscale(1);
+}
+
+/* The destinations sit beside the mark; the way out sits at the far edge.
+   The nav takes the rest of the masthead so the sign-out has somewhere to
+   go, which is the one line its-swiss says an application writes for this. */
+.masthead .nav { flex: 1; }
+.nav form.button_to { margin-inline-start: auto; }

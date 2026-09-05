@@ -1,0 +1,62 @@
+<%# What the chassis puts in the slots its_swiss/shell leaves. Everything else
+    a layout used to have to remember — the view transition opt-in, the
+    library's stylesheets, the importmap, a way past the masthead for a
+    keyboard, and the flash — is the shell's.
+
+    A layout rather than `layout "its_swiss/shell"` on the controller, because
+    content_for has to run while a view is rendering and these are set once for
+    the whole application. The last line is what makes this a layout *for* the
+    shell rather than one instead of it.
+
+    An engine's pages are wrapped in this layout too: the engine's own layout
+    fills its slots and then renders this one. Inside an engine's request the
+    bare route helpers are the engine's, so the chassis's are called through
+    main_app. %>
+
+<% content_for :head do %>
+  <link rel="icon" href="/icon.png" type="image/png">
+
+  <%# Archivo, shipped with the chassis rather than fetched from a font CDN:
+      this is a local tool and should render correctly with no third party
+      reachable. Preloaded, and fetched in CORS mode even same-origin, hence
+      crossorigin. Declared under the library's face names, after its
+      stylesheets, which is where its_swiss_typeface asks to be — and under
+      its own name, which is what a control's text is set in. %>
+  <link rel="preload" href="<%= asset_path("archivo-variable-latin.woff2") %>"
+        as="font" type="font/woff2" crossorigin>
+  <%= its_swiss_typeface variable: "archivo-variable-latin.woff2", family: "Archivo" %>
+
+  <%# The chassis's own stylesheet. The shell links the library's and stops;
+      theme.css holds the accent and the grid, and nothing links it but this.
+      Unlayered, so it wins wherever the two meet, whatever order they arrive
+      in. %>
+  <%= stylesheet_link_tag "theme", "data-turbo-track": "reload" %>
+<% end %>
+
+<% content_for :mark do %>
+  <%# The knobs are decoration and hidden from a screen reader: the wordmark
+      beside them already says the name. %>
+  <span class="masthead__knobs" aria-hidden="true">🎛️</span><%= link_to "Chassis", main_app.root_path %>
+<% end %>
+
+<%# The nav is the engine list, then whatever the engine you are in offers as
+    its own sections, then you. A tool that is mounted is a destination; one
+    that is bundled as a library is not, and does not appear. %>
+<% content_for :nav do %>
+  <% Chassis::Engines.all.each do |mount| %>
+    <%= nav_link_to mount.name, mount.path, current: in_engine?(mount) %>
+  <% end %>
+  <%= yield :sections %>
+  <% if authenticated? %>
+    <%= nav_link_to "Account", main_app.account_path %>
+    <%= button_to "Sign out", main_app.session_path, method: :delete, class: "button button--quiet" %>
+  <% end %>
+<% end %>
+
+<% if authenticated? %>
+  <% content_for :footer do %>
+    Signed in as <%= Current.user.email_address %>.
+  <% end %>
+<% end %>
+
+<%= render template: "layouts/its_swiss/shell" %>

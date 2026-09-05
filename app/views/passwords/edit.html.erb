@@ -1,0 +1,13 @@
+<% content_for :title, "Set a new password" %>
+
+<header>
+  <h1 class="page-title">Set a new password</h1>
+</header>
+
+<%= its_swiss_form_with url: password_path(params[:token]), method: :put do |form| %>
+  <%= form.password_field :password, label: "New password", required: true,
+        autocomplete: "new-password", maxlength: 72, hint: "Eight characters at least." %>
+  <%= form.password_field :password_confirmation, label: "Again", required: true,
+        autocomplete: "new-password", maxlength: 72 %>
+  <%= form.submit "Save" %>
+<% end %>

@@ -1,0 +1,17 @@
+<% content_for :title, "Chassis" %>
+
+<header>
+  <h1 class="page-title">Chassis</h1>
+  <p class="lede">One server, one door, and the tools it carries. Each is its own application at its own path.</p>
+</header>
+
+<% if @mounts.empty? %>
+  <p class="empty">Nothing is mounted yet. The first engine to arrive is Pandatone.</p>
+<% else %>
+  <dl class="pairs">
+    <% @mounts.each do |mount| %>
+      <dt><%= link_to mount.name, mount.path %></dt>
+      <dd><code><%= mount.path %></code></dd>
+    <% end %>
+  </dl>
+<% end %>
