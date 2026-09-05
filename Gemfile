@@ -24,6 +24,8 @@ gem "bcrypt", "~> 3.1.7"
 # its repository rather than from RubyGems; lib/chassis/engines.rb says
 # where each is mounted.
 gem "pandatone", github: "bobbymeyer/pandatone", tag: "v0.1.0"
+# From the branch until v0.1.0 is tagged.
+gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "engine"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 

@@ -12,8 +12,9 @@ rules; this file is how to run it.
 ## Running it
 
 ```sh
-bin/setup                 # gems, database
-bin/rails pandatone:seed  # a small, real palette library to look at
+bin/setup                  # gems, database
+bin/rails pandatone:seed   # a small, real palette library to look at
+bin/rails stripeclub:seed  # the patterns from the handoff's reference images
 bin/rails server
 bin/rails test:all        # unit, integration and system tests
 bin/ci                    # what CI runs: style, audits, brakeman, tests
@@ -37,7 +38,8 @@ In development the its-swiss specimen is at `/its-swiss/specimen`.
 | --- | --- |
 | The engine list | `lib/chassis/engines.rb` — the one place the chassis knows what it carries |
 | The bay | `/` — what is mounted, and where |
-| The tools | `/pandatone` — Pandatone, the palette library, from the `v0.1.0` tag of `bobbymeyer/pandatone` |
+| The tools | `/pandatone` — Pandatone, the palette library; `/stripeclub` — Stripeclub, the stripe pattern generator. Each from a tag of its repository |
+| Where tools meet | `config/initializers/stripeclub.rb` — Stripeclub's palettes come from Pandatone's public methods. Glue, and the only glue |
 | The door | `app/controllers/{sessions,passwords,registrations}_controller.rb` for people, `api_controller.rb` for scripts, `accounts_controller.rb` for the token |
 | The shell | `app/views/layouts/application.html.erb` fills its-swiss's slots: mark, nav, footer. An engine's layout renders it and adds its `:sections` to the nav |
 | The theme | `app/assets/stylesheets/theme.css` and the typeface in the layout: Archivo, the accent, the warm greys, for every tool at once |

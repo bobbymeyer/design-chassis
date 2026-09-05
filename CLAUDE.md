@@ -4,13 +4,14 @@ Host application for a family of small, composable design tools. Each tool is a 
 
 ## Where this repo is
 
-The first vertical slice works end to end. Pandatone is a gem-packaged mountable engine (the `v0.1.0` tag of `bobbymeyer/pandatone`; engines are not published to RubyGems), mounted at `/pandatone`, with an OpenAPI description, and the chassis calls `Pandatone.palette(id)` through the public method only (`test/integration/pandatone_test.rb`). See `README.md` for how to run it and where things live. The next engine, Stripeclub, is a separate effort.
+Two engines are mounted, and they meet. Pandatone (`v0.1.0` of `bobbymeyer/pandatone`) is at `/pandatone`; Stripeclub (`bobbymeyer/stripeclub`) is at `/stripeclub`. Engines are gem-packaged, taken from a tag, not published to RubyGems. Each has an OpenAPI description and a public Ruby interface, and the chassis calls both through those alone. The one cross-tool workflow is `config/initializers/stripeclub.rb`: Stripeclub asks its host where palettes come from, and the chassis answers with `Pandatone.palettes` and `Pandatone.palette`. A method call and a map; Stripeclub never learns which Pandatone answered, and Pandatone never learns it was asked (`test/integration/stripeclub_test.rb`). See `README.md` for how to run it and where things live. The next engine is morgue.
 
 - The engine list is `lib/chassis/engines.rb`. The routes mount what it lists; the nav and the bay link to it. Nothing else reads it. An engine's migrations run with the chassis's through the engine's own initializer; nothing is copied in.
 - `test/architecture/thin_chassis_test.rb` is the scale the chassis is weighed on: only the auth models, only the auth tables plus the engines' own prefixed ones, no queries outside the auth files, no engine internals named anywhere, no color arithmetic or SVG. A failure there means a capability has gone homeless: move it into an engine, do not loosen the test.
 - The door is the chassis's, for people and for scripts. `ApplicationController` authenticates a session; `ApiController` authenticates the account's API token, shown and regenerated on `/account`. An engine's controllers inherit from these two (`Pandatone.base_controller_class`, `Pandatone.api_base_controller_class`) and never learn what a user is.
 - The shell is the chassis's. An engine's layout fills its-swiss's slots and renders `layouts/application` around them; the one slot the chassis offers engines is `:sections`, placed in the masthead nav after the engine list. Inside an engine's request the bare route helpers are the engine's, so everything the chassis renders or redirects to on its own routes goes through `main_app`.
 - The theme is the chassis's: Archivo, the signal-red accent and the warm greys live in `theme.css` and the layout, so every tool is set in one voice. An engine ships components and a grid, never a typeface or an accent.
+- Tools meet only in `config/initializers/`. An engine that consumes another declares a seam (`Stripeclub.palette_source`) that takes plain data in the other's wire format, defaults to HTTP, and never names the sibling; the chassis fills the seam with the sibling's public methods. That file is the whole of a workflow, and it is glue.
 
 ### What converting Pandatone taught
 
@@ -21,6 +22,8 @@ For the next engine, in the order the problems appeared:
 3. A gem's dependencies are resolved by Bundler and loaded by nobody: the engine requires propshaft, importmap, turbo, stimulus and its-swiss itself.
 4. The dummy host under `test/` is the contract: the least a host must provide, and a place to prove the engine asks for nothing more.
 5. The engine's JavaScript registers its own Stimulus controllers from a module the engine's layout imports; the host adds nothing to its importmap.
+6. `git rm` a long list in one command and one missing path removes nothing, silently under `|| true`. Stripeclub shipped its old migrations into the chassis that way and made unprefixed tables there. Check `git ls-files` for what an application has and an engine does not before the first commit.
+7. An engine that consumed a sibling over HTTP keeps its wire-format reader and its client, and gets a seam the host can fill: nothing in the engine names the sibling's Ruby.
 
 ## Context
 
@@ -29,7 +32,7 @@ Existing tools, all standalone Rails apps or gems today:
 | Tool | What it is | Status |
 | --- | --- | --- |
 | **Pandatone** | Color palette library manager. Named/tagged colors, palettes queryable over REST. The keystone — everything else consumes it | Built and working. Ad hoc REST, no OpenAPI spec yet |
-| **Stripeclub** | Stripe pattern generator consuming Pandatone palettes. Value-first design (grayscale slots), palettes applied as swappable colorways | ~80% built |
+| **Stripeclub** | Stripe pattern generator consuming Pandatone palettes. Value-first design (grayscale slots), palettes applied as swappable colorways | Engine, mounted at `/stripeclub`; palettes from Pandatone in-process |
 | **its-swiss** | Shared Swiss International Typographic Style gem: CSS standards + basic components (nav, footer, grid primitives — apps define their own grids) | 0.7.0 on RubyGems. Pandatone and the chassis consume it |
 | **morgue** | Segmented, color-indexed reference archive (Pinterest-style) | Separate app, migrates later |
 
@@ -88,7 +91,9 @@ Do **not** build a general workflow engine. A workflow is a hardcoded ordered li
 3. ~~Mount it in the chassis at `/pandatone`: one line in `lib/chassis/engines.rb`, and replace the test that asserts the list is empty with the first real mount.~~ **Done.**
 4. ~~Retrofit an **OpenAPI spec** onto Pandatone during extraction — it's the reference implementation for the tools-self-describe principle. Spec on by default.~~ **Done**: `/pandatone/api/v1/openapi`, open to anyone, held to the routes by a test.
 5. ~~Prove one consumer calling `Pandatone.palette(id)` through the public method only.~~ **Done**: `test/integration/pandatone_test.rb`.
-6. ~~**Done when:** one vertical slice works end to end.~~ **Done.** Next engine (Stripeclub) is a separate effort. Read-only tokens, if Stripeclub still needs one, belong on the chassis's door.
+6. ~~**Done when:** one vertical slice works end to end.~~ **Done.**
+7. ~~Extract **Stripeclub**, mount it at `/stripeclub`, and hand it Pandatone's palettes in-process through a seam the chassis fills.~~ **Done.** Read-only tokens turned out unnecessary: Stripeclub calls `Pandatone.palette` and carries no token at all.
+8. Next: **morgue**.
 
 No big-bang rewrite. One engine at a time.
 
