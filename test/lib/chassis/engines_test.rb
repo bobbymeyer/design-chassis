@@ -30,6 +30,14 @@ class Chassis::EnginesTest < ActiveSupport::TestCase
     assert_equal Pandatone::Engine, mount.constant
   end
 
+  test "the second mount is Stripeclub, at /stripeclub" do
+    mount = Chassis::Engines.all.second
+
+    assert_equal "Stripeclub", mount.name
+    assert_equal "/stripeclub", mount.path
+    assert_equal Stripeclub::Engine, mount.constant
+  end
+
   test "the routes mount exactly what the list says, at the paths it says" do
     mounted = Rails.application.routes.routes.filter_map do |route|
       app = route.app.app

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_04_224403) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_05_100003) do
   create_table "pandatone_colors", force: :cascade do |t|
     t.integer "b", null: false
     t.decimal "c", precision: 5, scale: 1, null: false
@@ -57,6 +57,103 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_224403) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "stripeclub_colorways", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.integer "palette_id", null: false
+    t.integer "pattern_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pattern_id"], name: "index_stripeclub_colorways_on_pattern_id"
+  end
+
+  create_table "stripeclub_imperfections", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "pattern_id", null: false
+    t.integer "seed", null: false
+    t.decimal "texture", precision: 9, scale: 6, default: "0.0", null: false
+    t.decimal "texture_frequency", precision: 9, scale: 6, default: "0.8", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "variance", precision: 9, scale: 6, default: "0.0", null: false
+    t.decimal "wobble", precision: 9, scale: 6, default: "0.0", null: false
+    t.decimal "wobble_frequency", precision: 9, scale: 6, default: "0.02", null: false
+    t.integer "wobble_octaves", default: 2, null: false
+    t.index ["pattern_id"], name: "index_stripeclub_imperfections_on_pattern_id", unique: true
+  end
+
+  create_table "stripeclub_palette_snapshots", force: :cascade do |t|
+    t.json "colors", null: false
+    t.integer "colorway_id", null: false
+    t.datetime "created_at", null: false
+    t.string "palette_name"
+    t.datetime "taken_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["colorway_id"], name: "index_stripeclub_palette_snapshots_on_colorway_id", unique: true
+  end
+
+  create_table "stripeclub_patterns", force: :cascade do |t|
+    t.decimal "angle", precision: 7, scale: 3, default: "90.0", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.decimal "row_depth", precision: 9, scale: 6, default: "1.0", null: false
+    t.integer "slot_count", default: 1, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stripeclub_rows", force: :cascade do |t|
+    t.integer "color_offset", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.decimal "height", precision: 9, scale: 6, null: false
+    t.boolean "mirrored", default: false, null: false
+    t.integer "pattern_id", null: false
+    t.decimal "phase", precision: 9, scale: 6, default: "0.0", null: false
+    t.integer "position", null: false
+    t.datetime "updated_at", null: false
+    t.integer "width_denominator", default: 1, null: false
+    t.integer "width_numerator", default: 1, null: false
+    t.index ["pattern_id", "position"], name: "index_stripeclub_rows_on_pattern_id_and_position", unique: true
+    t.index ["pattern_id"], name: "index_stripeclub_rows_on_pattern_id"
+  end
+
+  create_table "stripeclub_sequences", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "pattern_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pattern_id"], name: "index_stripeclub_sequences_on_pattern_id", unique: true
+  end
+
+  create_table "stripeclub_stripes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "position", null: false
+    t.integer "sequence_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "value_id", null: false
+    t.decimal "width", precision: 9, scale: 6, null: false
+    t.index ["sequence_id", "position"], name: "index_stripeclub_stripes_on_sequence_id_and_position", unique: true
+    t.index ["sequence_id"], name: "index_stripeclub_stripes_on_sequence_id"
+    t.index ["value_id"], name: "index_stripeclub_stripes_on_value_id"
+  end
+
+  create_table "stripeclub_value_rules", force: :cascade do |t|
+    t.integer "colorway_id", null: false
+    t.datetime "created_at", null: false
+    t.string "kind", default: "auto_value_match", null: false
+    t.json "settings", null: false
+    t.datetime "updated_at", null: false
+    t.integer "value_id", null: false
+    t.index ["colorway_id", "value_id"], name: "index_stripeclub_value_rules_on_colorway_id_and_value_id", unique: true
+    t.index ["colorway_id"], name: "index_stripeclub_value_rules_on_colorway_id"
+    t.index ["value_id"], name: "index_stripeclub_value_rules_on_value_id"
+  end
+
+  create_table "stripeclub_values", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "pattern_id", null: false
+    t.integer "position", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pattern_id", "position"], name: "index_stripeclub_values_on_pattern_id_and_position", unique: true
+    t.index ["pattern_id"], name: "index_stripeclub_values_on_pattern_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "api_token"
     t.datetime "created_at", null: false
@@ -70,4 +167,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_224403) do
   add_foreign_key "pandatone_palette_colors", "pandatone_colors", column: "color_id"
   add_foreign_key "pandatone_palette_colors", "pandatone_palettes", column: "palette_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "stripeclub_colorways", "stripeclub_patterns", column: "pattern_id"
+  add_foreign_key "stripeclub_imperfections", "stripeclub_patterns", column: "pattern_id"
+  add_foreign_key "stripeclub_palette_snapshots", "stripeclub_colorways", column: "colorway_id"
+  add_foreign_key "stripeclub_rows", "stripeclub_patterns", column: "pattern_id"
+  add_foreign_key "stripeclub_sequences", "stripeclub_patterns", column: "pattern_id"
+  add_foreign_key "stripeclub_stripes", "stripeclub_sequences", column: "sequence_id"
+  add_foreign_key "stripeclub_stripes", "stripeclub_values", column: "value_id"
+  add_foreign_key "stripeclub_value_rules", "stripeclub_colorways", column: "colorway_id"
+  add_foreign_key "stripeclub_value_rules", "stripeclub_values", column: "value_id"
+  add_foreign_key "stripeclub_values", "stripeclub_patterns", column: "pattern_id"
 end
