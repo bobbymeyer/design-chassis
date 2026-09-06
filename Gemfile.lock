@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
-  revision: bc6864c1fb37f26b84b75092aa9f651a01245cf1
-  branch: claude/badger-handoff-bmcsi3
+  revision: 488dd1955692967f788299969ca714e651bff000
+  ref: 488dd1955692967f788299969ca714e651bff000
   specs:
     badger (0.1.0)
       rexml (~> 3.2)
