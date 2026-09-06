@@ -29,10 +29,7 @@ gem "stripeclub", github: "bobbymeyer/stripeclub", tag: "v0.1.0"
 # setting, plain Ruby) and the engine, which depends on the core at exactly
 # its own version. One git block takes both. Its type sidecar needs the
 # Python packages in requirements.txt; the Dockerfile installs them.
-#
-# Pinned to the commit v0.1.0 names until the tag is pushed; then this line
-# becomes `tag: "v0.1.0"` and nothing else changes.
-git "https://github.com/bobbymeyer/badger", ref: "488dd1955692967f788299969ca714e651bff000" do
+git "https://github.com/bobbymeyer/badger", tag: "v0.1.0" do
   gem "badger"
   gem "badger-rails"
 end
