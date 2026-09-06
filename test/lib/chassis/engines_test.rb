@@ -38,6 +38,14 @@ class Chassis::EnginesTest < ActiveSupport::TestCase
     assert_equal Stripeclub::Engine, mount.constant
   end
 
+  test "the third mount is Badger, at /badger" do
+    mount = Chassis::Engines.all.third
+
+    assert_equal "Badger", mount.name
+    assert_equal "/badger", mount.path
+    assert_equal Badger::Engine, mount.constant
+  end
+
   test "the routes mount exactly what the list says, at the paths it says" do
     mounted = Rails.application.routes.routes.filter_map do |route|
       app = route.app.app
