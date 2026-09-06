@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
-  revision: 54dd20613460a1c0910df40cc65ec15c8174b1bf
+  revision: 1565a3fc5e5a6e0841de1d118ffa8615929fed71
   branch: claude/badger-handoff-bmcsi3
   specs:
     badger (0.1.0)
