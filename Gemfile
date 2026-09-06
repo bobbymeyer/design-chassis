@@ -25,6 +25,14 @@ gem "bcrypt", "~> 3.1.7"
 # where each is mounted.
 gem "pandatone", github: "bobbymeyer/pandatone", tag: "v0.1.0"
 gem "stripeclub", github: "bobbymeyer/stripeclub", tag: "v0.1.0"
+# Badger is two gems from one repository: the core (geometry and type
+# setting, plain Ruby) and the engine, which depends on the core at exactly
+# its own version. One git block takes both. Its type sidecar needs the
+# Python packages in requirements.txt; the Dockerfile installs them.
+git "https://github.com/bobbymeyer/badger", branch: "claude/badger-handoff-bmcsi3" do
+  gem "badger"
+  gem "badger-rails"
+end
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 

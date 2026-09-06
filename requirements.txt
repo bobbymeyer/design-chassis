@@ -1,0 +1,8 @@
+# The Python packages the mounted engines' sidecars need, installed into the
+# image's python3 by the Dockerfile. Badger's requirements.txt is the source;
+# this is its copy, kept by hand so that two engines pinning different
+# versions is caught here at build time rather than at runtime.
+fonttools>=4.50
+brotli>=1.1
+uharfbuzz>=0.40
+skia-pathops>=0.8

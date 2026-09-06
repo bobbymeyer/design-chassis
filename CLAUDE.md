@@ -4,7 +4,9 @@ Host application for a family of small, composable design tools. Each tool is a 
 
 ## Where this repo is
 
-The first vertical slice works end to end. Pandatone is a gem-packaged mountable engine (the `v0.1.0` tag of `bobbymeyer/pandatone`; engines are not published to RubyGems), mounted at `/pandatone`, with an OpenAPI description, and the chassis calls `Pandatone.palette(id)` through the public method only (`test/integration/pandatone_test.rb`). See `README.md` for how to run it and where things live. The next engine, Stripeclub, is a separate effort.
+The first vertical slice works end to end. Pandatone is a gem-packaged mountable engine (the `v0.1.0` tag of `bobbymeyer/pandatone`; engines are not published to RubyGems), mounted at `/pandatone`, with an OpenAPI description, and the chassis calls `Pandatone.palette(id)` through the public method only (`test/integration/pandatone_test.rb`). See `README.md` for how to run it and where things live. Stripeclub is mounted at `/stripeclub` and Badger at `/badger`; both consume Pandatone through a `palette_source` lambda set in their initializers.
+
+Badger is the first engine with a sidecar: its type setting runs HarfBuzz and fontTools in a `python3` subprocess. The chassis's part is the interpreter and the packages, installed by the Dockerfile from `requirements.txt` (a hand-kept copy of the gem's), and `Badger.font_directories` pointing at the fonts the shell already ships. `bin/rails badger:doctor` says whether it can run.
 
 - The engine list is `lib/chassis/engines.rb`. The routes mount what it lists; the nav and the bay link to it. Nothing else reads it. An engine's migrations run with the chassis's through the engine's own initializer; nothing is copied in.
 - `test/architecture/thin_chassis_test.rb` is the scale the chassis is weighed on: only the auth models, only the auth tables plus the engines' own prefixed ones, no queries outside the auth files, no engine internals named anywhere, no color arithmetic or SVG. A failure there means a capability has gone homeless: move it into an engine, do not loosen the test.
