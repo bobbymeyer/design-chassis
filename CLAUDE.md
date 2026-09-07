@@ -4,14 +4,14 @@ Host application for a family of small, composable design tools. Each tool is a 
 
 ## Where this repo is
 
-The first vertical slice works end to end. Pandatone is a gem-packaged mountable engine (the `v0.1.0` tag of `bobbymeyer/pandatone`; engines are not published to RubyGems), mounted at `/pandatone`, with an OpenAPI description, and the chassis calls `Pandatone.palette(id)` through the public method only (`test/integration/pandatone_test.rb`). See `README.md` for how to run it and where things live. Stripeclub is mounted at `/stripeclub` and Badger at `/badger`; both consume Pandatone through a `palette_source` lambda set in their initializers.
+The first vertical slice works end to end. Pandatone is a gem-packaged mountable engine (the `v0.1.0` tag of `bobbymeyer/pandatone`; engines are not published to RubyGems), mounted at `/pandatone`, with an OpenAPI description, and the chassis calls `Pandatone.palette(id)` through the public method only (`test/integration/pandatone_test.rb`). See `README.md` for how to run it and where things live. Stripeclub is mounted at `/stripeclub` and Badger at `/badger`; both dress through Pandatone's own dresser (`Pandatone::Dresser`), which asks the Pandatone in this process when no `PANDATONE_URL` is set, so the chassis hands over nothing. The three tools are set on its-swiss 0.8 — one page head, one filter block, one card list — and `UI-ALIGNMENT.md` is the record of how they were brought into line and the rule that keeps them there. `/gallery` shows the same screen of every tool side by side.
 
 Badger is the first engine with a sidecar: its type setting runs HarfBuzz and fontTools in a `python3` subprocess. The chassis's part is the interpreter and the packages, installed by the Dockerfile from `requirements.txt` (a hand-kept copy of the gem's), and `Badger.font_directories` pointing at the fonts the shell already ships. `bin/rails badger:doctor` says whether it can run.
 
 - The engine list is `lib/chassis/engines.rb`. The routes mount what it lists; the nav and the bay link to it. Nothing else reads it. An engine's migrations run with the chassis's through the engine's own initializer; nothing is copied in.
 - `test/architecture/thin_chassis_test.rb` is the scale the chassis is weighed on: only the auth models, only the auth tables plus the engines' own prefixed ones, no queries outside the auth files, no engine internals named anywhere, no color arithmetic or SVG. A failure there means a capability has gone homeless: move it into an engine, do not loosen the test.
 - The door is the chassis's, for people and for scripts. `ApplicationController` authenticates a session; `ApiController` authenticates the account's API token, shown and regenerated on `/account`. An engine's controllers inherit from these two (`Pandatone.base_controller_class`, `Pandatone.api_base_controller_class`) and never learn what a user is.
-- The shell is the chassis's. An engine's layout fills its-swiss's slots and renders `layouts/application` around them; the one slot the chassis offers engines is `:sections`, placed in the masthead nav after the engine list. Inside an engine's request the bare route helpers are the engine's, so everything the chassis renders or redirects to on its own routes goes through `main_app`.
+- The shell is the chassis's. An engine's layout fills its-swiss's slots and renders `layouts/application` around them; the one slot the chassis offers engines is `:sections`, placed in the subnav — the shaded band under the masthead that carries the tool's mark and its own destinations, while the tools themselves sit in the nav's 🧰 Tools menu. Inside an engine's request the bare route helpers are the engine's, so everything the chassis renders or redirects to on its own routes goes through `main_app`.
 - The theme is the chassis's: Archivo, the signal-red accent and the warm greys live in `theme.css` and the layout, so every tool is set in one voice. An engine ships components and a grid, never a typeface or an accent.
 
 ### What converting Pandatone taught
@@ -22,7 +22,8 @@ For the next engine, in the order the problems appeared:
 2. The engine's `ApplicationRecord` is `abstract_class`, never `primary_abstract_class`.
 3. A gem's dependencies are resolved by Bundler and loaded by nobody: the engine requires propshaft, importmap, turbo, stimulus and its-swiss itself.
 4. The dummy host under `test/` is the contract: the least a host must provide, and a place to prove the engine asks for nothing more.
-5. The engine's JavaScript registers its own Stimulus controllers from a module the engine's layout imports; the host adds nothing to its importmap.
+5. The engine's JavaScript registers its own Stimulus controllers from a module the engine's layout imports; the host adds nothing to its importmap. The host registers the library's two, `its-swiss-clipboard` and `its-swiss-live-search`, once.
+6. A pattern enters its-swiss after two engines have drawn it, and a pattern that reads a palette enters Pandatone when a second consumer copies it. Stripeclub's `ITS-SWISS-CANDIDATES.md` and the chassis's `UI-ALIGNMENT.md` are where that is recorded.
 
 ## Context
 
@@ -32,7 +33,7 @@ Existing tools, all standalone Rails apps or gems today:
 | --- | --- | --- |
 | **Pandatone** | Color palette library manager. Named/tagged colors, palettes queryable over REST. The keystone — everything else consumes it | Built and working. Ad hoc REST, no OpenAPI spec yet |
 | **Stripeclub** | Stripe pattern generator consuming Pandatone palettes. Value-first design (grayscale slots), palettes applied as swappable colorways | ~80% built |
-| **its-swiss** | Shared Swiss International Typographic Style gem: CSS standards + basic components (nav, footer, grid primitives — apps define their own grids) | 0.7.0 on RubyGems. Pandatone and the chassis consume it |
+| **its-swiss** | Shared Swiss International Typographic Style gem: CSS standards + basic components (nav, page head, filters, cards, footer, grid primitives — apps define their own grids) | 0.8.0 on a branch, 0.7.2 on RubyGems. Every engine and the chassis consume it |
 | **morgue** | Segmented, color-indexed reference archive (Pinterest-style) | Separate app, migrates later |
 
 ## Stack and conventions (non-negotiable)

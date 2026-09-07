@@ -19,15 +19,18 @@ class BadgerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "h1", "Badges"
     assert_select ".masthead__mark a", text: "Chassis"
-    assert_select "nav.nav a[aria-current=page][href='/badger']", text: "Badger"
+    assert_select "nav.nav a[aria-current=page][href='/badger']", text: /Badger/
     assert_select "link[rel=stylesheet][href*='badger/components']"
+    assert_select "link[rel=stylesheet][href*='pandatone/dresser']"
+    assert_select "header.page-head h1.page-title", text: "Badges"
+    assert_select "script[type=module]", /import "badger"/
   end
 
   test "the other tools stay in the nav, unselected" do
     sign_in_as users(:one)
     get "/badger"
 
-    assert_select "nav.nav a[href='/pandatone']", text: "Pandatone"
+    assert_select "nav.nav a[href='/pandatone']", text: /Pandatone/
     assert_select "nav.nav a[href='/stripeclub'][aria-current]", false
   end
 
@@ -73,22 +76,28 @@ class BadgerTest < ActionDispatch::IntegrationTest
 
   # --- The two tools together ------------------------------------------------
 
-  test "the palettes Badger is handed are Pandatone's, in Pandatone's wire format" do
+  # Badger dresses a badge through Pandatone's own dresser, the way
+  # Stripeclub does: with no PANDATONE_URL it asks the Pandatone in this
+  # process, and the chassis hands over nothing.
+  test "a palette written into Pandatone is on Badger's picker, on the ladder" do
     post "/pandatone/api/v1/palettes", headers: bearer, as: :json, params: {
       palette: { name: "Brand Core", tags: %w[ brand active ],
                  colors: [ { name: "signal-red", hex: "#E30613" }, { name: "ink-black", hex: "#111111" } ] }
     }
     assert_response :created
 
-    palette = Badger.palette_source.call.sole
-    assert_equal %w[ id name tags colors ].sort, palette.keys.sort
-    assert_equal "Brand Core", palette["name"]
-    assert_equal [ "#E30613", "#111111" ], palette["colors"].map { |color| color["hex"] }
-    assert palette["colors"].first["rgb"].keys.all?(String), "the channels are string-keyed, all the way down"
-  end
+    sign_in_as users(:one)
+    post "/badger/badges", params: { badge: { name: "Kiruna",
+      spec_yaml: "shape: { kind: circle, radius: 80 }\nregions: [ { kind: rule, distance: 0, weight: 4 } ]\n" } }
+    badge = Badger.badges.sole
 
-  test "a palette the chassis has none of is an empty catalogue, not an error" do
-    assert_equal [], Badger.palette_source.call
+    get "/badger/badges/#{badge[:id]}/colorways/new?refresh=1"
+
+    assert_response :success
+    assert_select "section.palettes:first-of-type td", text: "Brand Core"
+    greys = css_select(".palette-swatch").map { |swatch| swatch["style"][/#\h{6}/] }
+    assert_equal greys.sort.reverse, greys, "the strip runs lightest first"
+    assert_not_includes greys, "#E30613", "the picker shows value, not hue"
   end
 
   private

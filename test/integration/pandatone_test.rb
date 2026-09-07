@@ -19,10 +19,10 @@ class PandatoneTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Palettes"
     # The chassis's shell around the engine's page.
     assert_select ".masthead__mark a", text: "Chassis"
-    assert_select "nav.nav a[aria-current=page][href='/pandatone']", text: "Pandatone"
+    assert_select "nav.nav a[aria-current=page][href='/pandatone']", text: /Pandatone/
     # The engine's sections, placed in the chassis's nav.
-    assert_select "nav.nav a", text: "Colors"
-    assert_select "nav.nav a", text: "Lookup"
+    assert_select "nav.subnav a", text: "Colors"
+    assert_select "nav.subnav a", text: "Lookup"
     # The engine's own stylesheet, through the chassis's head.
     assert_select "link[rel=stylesheet][href*='pandatone/components']"
   end
@@ -34,7 +34,6 @@ class PandatoneTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
     get "/pandatone"
 
-    assert_select "nav.nav form[action='/session'] button", text: "Sign out"
     assert_select "nav.nav a[href='/account']", text: "Account"
   end
 

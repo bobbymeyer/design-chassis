@@ -10,7 +10,7 @@
 <% else %>
   <dl class="pairs">
     <% @mounts.each do |mount| %>
-      <dt><%= link_to mount.name, mount.path %></dt>
+      <dt><%= link_to tool_mark(mount) + " " + mount.name, mount.path %></dt>
       <dd><code><%= mount.path %></code></dd>
     <% end %>
   </dl>

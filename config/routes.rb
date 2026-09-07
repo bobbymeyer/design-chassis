@@ -3,6 +3,11 @@ Rails.application.routes.draw do
     mount ItsSwiss::Engine => "/its-swiss"
   end
 
+  # The gallery: the same screen of every tool, side by side, behind the
+  # door. Not in production, where a page of frames of every tool is a
+  # page nobody is meant to read.
+  get "gallery" => "gallery#show" unless Rails.env.production?
+
   # The tools. Each is a whole application at its own path, and the list of
   # them is the chassis's only knowledge of what it carries.
   Chassis::Engines.all.each do |engine|

@@ -39,17 +39,29 @@
   <span class="masthead__knobs" aria-hidden="true">🎛️</span><%= link_to "Chassis", main_app.root_path %>
 <% end %>
 
-<%# The nav is the engine list, then whatever the engine you are in offers as
-    its own sections, then you. A tool that is mounted is a destination; one
-    that is bundled as a library is not, and does not appear. %>
+<%# The nav is the tools, in a menu, and you. A tool that is mounted is a
+    destination in the menu; one that is bundled as a library is not, and
+    does not appear. The way out is on the account page, with the rest of
+    what is yours. %>
 <% content_for :nav do %>
-  <% Chassis::Engines.all.each do |mount| %>
-    <%= nav_link_to mount.name, mount.path, current: in_engine?(mount) %>
+  <%= nav_menu tag.span("🧰", class: "glyph", aria: { hidden: true }) + " Tools", current: current_mount.present? do %>
+    <% Chassis::Engines.all.each do |mount| %>
+      <%= nav_link_to tool_mark(mount) + " " + mount.name, mount.path, current: in_engine?(mount) %>
+    <% end %>
   <% end %>
-  <%= yield :sections %>
   <% if authenticated? %>
-    <%= nav_link_to "Account", main_app.account_path %>
-    <%= button_to "Sign out", main_app.session_path, method: :delete, class: "button button--quiet" %>
+    <%= nav_link_to "Account", main_app.account_path, class: "nav__account" %>
+  <% end %>
+<% end %>
+
+<%# Inside a tool, a second layer under the masthead: the tool's mark and
+    name, then whatever it offers as its own sections. The one slot the
+    chassis offers an engine, placed here rather than in the nav, so the
+    tools' own destinations never crowd the application's. %>
+<% if (mount = current_mount) %>
+  <% content_for :subnav do %>
+    <%= link_to tool_mark(mount) + " " + mount.name, mount.path, class: "subnav__mark" %>
+    <%= yield :sections %>
   <% end %>
 <% end %>
 
