@@ -48,8 +48,9 @@ top of the file.
   status, the rough grid, the two repeat-varying rule kinds. What a stripe
   pattern lays out.
 - **Badger**: the preview frame, the slots table with its bindings, the
-  document. What a badge lays out. The editor canvas that is mocked in the
-  Badger Editor design is Badger's until a second tool wants a canvas.
+  document, and from 0.4 the editor: the tree, the drawing with its
+  construction as the controls, the inspector, the reference under it. What
+  a badge lays out. The canvas is Badger's until a second tool wants one.
 
 ## A day of use
 
@@ -85,9 +86,11 @@ three for the tree, six for the canvas, three for the inspector.
 `/gallery`, behind the door and not in production, frames the same screen of
 every tool side by side — index, compose, dress — each the page the tool
 already serves, at the width it is laid out for. Drift shows there first.
-Its last row is the Badger editor as drawn: the mockup's three boards from
-`mockups/badger-editor/`, framed the same way, so a drawing that drifts from
-the tools it will join shows up beside them before it is built.
+Its last row is the Badger editor: the Compose and Dress surfaces Badger 0.4
+serves, beside the one board of `mockups/badger-editor/` not built yet, the
+start of a badge. A board is framed the same way as a page, so a drawing
+that drifts from the tools it will join shows up beside them before it is
+built; once it is built, the page takes the board's place in the row.
 The library's own specimen is at `/its-swiss/specimen` in development.
 
 ## What is left
