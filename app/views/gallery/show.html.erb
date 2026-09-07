@@ -1,4 +1,10 @@
-<%= page_head "Gallery", lede: "The same screen of every tool, side by side. Each frame is the page the tool serves; what drifts apart shows here first." %>
+<%= page_head "Gallery", lede: "The same screen of every tool, side by side. Each frame is the page the tool serves; what drifts apart shows here first." do %>
+  <%# The twelve fields, drawn over every frame: the grid only organises
+      when the empty fields are as planned as the full ones, and a page
+      that fills half its measure shows here as half. CSS reads the box;
+      no script. %>
+  <label class="choice"><input type="checkbox" id="fields" class="gallery__fields"> Show the fields</label>
+<% end %>
 
 <% @screens.each do |screen| %>
   <section class="gallery">
