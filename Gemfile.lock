@@ -28,8 +28,8 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/pandatone.git
-  revision: ae98641d186e39fa86083cd020adc76e04ba45ce
-  branch: claude/ui-alignment
+  revision: ba8c30c5eceba4874ccc7a01f59075d1aa51d1e4
+  branch: main
   specs:
     pandatone (0.2.0)
       importmap-rails (>= 2.0, < 4)

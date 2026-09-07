@@ -27,7 +27,7 @@ gem "bcrypt", "~> 3.1.7"
 # where each is mounted.
 # Until 0.2.0 of each is tagged, the three are taken from the branches that
 # align them; each line goes back to a tag when it is.
-gem "pandatone", github: "bobbymeyer/pandatone", branch: "claude/ui-alignment"
+gem "pandatone", github: "bobbymeyer/pandatone", branch: "main"
 gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "claude/ui-alignment"
 # Badger is two gems from one repository: the core (geometry and type
 # setting, plain Ruby) and the engine, which depends on the core at exactly
