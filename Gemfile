@@ -29,7 +29,7 @@ gem "stripeclub", github: "bobbymeyer/stripeclub", tag: "v0.3.0"
 # setting, plain Ruby) and the engine, which depends on the core at exactly
 # its own version. One git block takes both. Its type sidecar needs the
 # Python packages in requirements.txt; the Dockerfile installs them.
-git "https://github.com/bobbymeyer/badger", tag: "v0.3.0" do
+git "https://github.com/bobbymeyer/badger", branch: "editor" do
   gem "badger"
   gem "badger-rails"
 end

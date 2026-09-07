@@ -1,12 +1,12 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
-  revision: 81e4f85ccd11b16ed9e75d0d1c0e4337312837ae
-  tag: v0.3.0
+  revision: a696dc0ddb012fb48ca734ed80e9ea8152e35ce1
+  branch: editor
   specs:
-    badger (0.3.0)
+    badger (0.4.0)
       rexml (~> 3.2)
-    badger-rails (0.3.0)
-      badger (= 0.3.0)
+    badger-rails (0.4.0)
+      badger (= 0.4.0)
       importmap-rails (>= 2.0, < 4)
       its-swiss (~> 0.9)
       pandatone (>= 0.3)
@@ -494,8 +494,8 @@ CHECKSUMS
   activesupport (8.1.3.1) sha256=85458765f25ea48b9019c46b6bb3fa5683197bf4280d9f06710a6e8d7a831376
   addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
-  badger (0.3.0)
-  badger-rails (0.3.0)
+  badger (0.4.0)
+  badger-rails (0.4.0)
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bcrypt (3.1.22) sha256=1f0072e88c2d705d94aff7f2c5cb02eb3f1ec4b8368671e19112527489f29032
   bcrypt_pbkdf (1.1.2) sha256=c2414c23ce66869b3eb9f643d6a3374d8322dfb5078125c82792304c10b94cf6

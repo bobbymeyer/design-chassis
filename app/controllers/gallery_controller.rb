@@ -8,10 +8,12 @@
 # once. What it reads of each is its public Ruby methods, to find something
 # to open, and nothing else.
 #
-# The last row is the one exception: the Badger editor as drawn, before it is
-# built. Its boards are the design's, not a tool's, and they are framed here
-# so the drawing is weighed on the same page as the pages — a mockup that
-# drifts from the tools it will join is drift too.
+# The last row is the Badger editor: the Compose and Dress surfaces the tool
+# serves, beside the one board of its design that is not built yet. The
+# boards are the design's, not a tool's, and a board is framed here so the
+# drawing is weighed on the same page as the pages — a mockup that drifts
+# from the tools it will join is drift too. A board that has been built
+# leaves the row, and the built page takes its place.
 class GalleryController < ApplicationController
   Screen = Data.define(:name, :note, :frames)
   Frame = Data.define(:name, :path, :home)
@@ -28,9 +30,13 @@ class GalleryController < ApplicationController
       screen("Dress", "The picker is Pandatone's dresser's, on every tool that wears a palette; Pandatone shows the palette itself.",
         first_palette_path, first_dress_path("/stripeclub/patterns", Stripeclub.patterns),
         first_dress_path("/badger/badges", Badger.badges)),
-      Screen.new(name: "Editor, as drawn",
-        note: "The Badger editor's mockup, under the chassis's masthead and Badger's subnav: what the tool will look like from the inside once it is built.",
-        frames: BOARDS.map { |board| Frame.new(name: board.capitalize, path: "/gallery/badger-editor/#{board}", home: "/badger") })
+      Screen.new(name: "Editor",
+        note: "The Badger editor as built, Compose and Dress, beside the one board of its design still to build: the start of a badge, as drawn.",
+        frames: [
+          Frame.new(name: "Compose", path: first_badge_path, home: "/badger"),
+          Frame.new(name: "Dress", path: first_badge_path && "#{first_badge_path}?section=dress", home: "/badger"),
+          Frame.new(name: "Start, as drawn", path: "/gallery/badger-editor/start", home: "/badger")
+        ])
     ]
   end
 
@@ -58,6 +64,10 @@ class GalleryController < ApplicationController
     def first_palette_path
       first = Pandatone.palettes.first
       first ? "/pandatone/palettes/#{first[:id]}" : nil
+    end
+
+    def first_badge_path
+      @first_badge_path ||= (first = Badger.badges.first) && "/badger/badges/#{first[:id]}"
     end
 
     def first_dress_path(prefix, summaries)

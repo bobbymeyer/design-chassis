@@ -22,16 +22,21 @@ class GalleryTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # The drawing is weighed on the same page as the pages: the mockup's three
-  # boards are the last row, each a bare page of the chassis's own.
-  test "the gallery frames the Badger editor as drawn" do
+  # The editor is weighed on the same page as the pages: the last row is the
+  # two surfaces Badger serves and the one board of the design not yet built,
+  # a bare page of the chassis's own.
+  test "the gallery frames the Badger editor, built and as drawn" do
     sign_in_as users(:one)
+    post "/badger/badges", params: { badge: { name: "Kiruna",
+      spec_yaml: "shape: { kind: circle, radius: 80 }\nregions: [ { kind: rule, distance: 0, weight: 4 } ]\n" } }
+    badge = Badger.badges.sole
     get "/gallery"
 
-    assert_select "section.gallery:last-of-type h2", text: "Editor, as drawn"
-    %w[ compose dress start ].each do |board|
-      assert_select "section.gallery:last-of-type iframe[src='/gallery/badger-editor/#{board}']", 1
-    end
+    assert_select "section.gallery:last-of-type h2", text: "Editor"
+    assert_select "section.gallery:last-of-type iframe[src='/badger/badges/#{badge[:id]}']", 1
+    assert_select "section.gallery:last-of-type iframe[src=?]", "/badger/badges/#{badge[:id]}?section=dress", 1
+    assert_select "section.gallery:last-of-type iframe[src='/gallery/badger-editor/start']", 1
+    assert_select "section.gallery:last-of-type iframe[src='/gallery/badger-editor/compose']", 0, "the built page stands in for its board"
   end
 
   test "a board is the mockup in a page that declares the typeface and nothing else" do
@@ -62,5 +67,7 @@ class GalleryTest < ActionDispatch::IntegrationTest
     get "/gallery"
 
     assert_select "section.gallery:nth-of-type(3) .empty", minimum: 1
+    assert_select "section.gallery:last-of-type .empty", 2, "no badge, no editor to open; the board is still drawn"
+    assert_select "section.gallery:last-of-type iframe[src='/gallery/badger-editor/start']", 1
   end
 end
