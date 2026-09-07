@@ -1,0 +1,15 @@
+<%# A board of a mockup, framed by the gallery: the drawing, the typeface it
+    is drawn in, and nothing of the shell — the drawing carries its own
+    masthead, and a shell around it would frame a shell. %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Badger editor, as drawn</title>
+    <%= its_swiss_typeface variable: "archivo-variable-latin.woff2", family: "Archivo" %>
+    <style>body { margin: 0; }</style>
+  </head>
+  <body><%= yield %></body>
+</html>

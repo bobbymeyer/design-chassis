@@ -1,0 +1,54 @@
+{
+  "artboards": [
+    {
+      "file": "Compose.dc.html",
+      "title": "Compose",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "file": "Dress.dc.html",
+      "title": "Dress",
+      "x": 1560,
+      "y": 0,
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "file": "Start.dc.html",
+      "title": "Start",
+      "x": 3120,
+      "y": 0,
+      "w": 1440,
+      "h": 900
+    }
+  ],
+  "annotations": [
+    {
+      "id": "how-to-read",
+      "x": 0,
+      "y": -220,
+      "w": 520,
+      "text": "Compose: the construction lines are the controls, and handles belong to the selection. STOCKHOLM is selected, so its baseline is red with the sweep handles at its ends and a dot at each letter to kern from; select the ring and its edges get handles instead. The setting line is the dashed horizontal with the digits' locators crossed on it. The pin by the S is a real finding from the render: with DejaVu standing in for the reference face, justify had to go to negative tracking."
+    },
+    {
+      "id": "dress-note",
+      "x": 1560,
+      "y": -160,
+      "w": 520,
+      "text": "Dress: the same badge wearing a Pandatone palette, over the reference at 50%. Colorways in the inspector swap instantly; the table shows the rule each slot resolves by, and drift is asked for, never applied."
+    },
+    {
+      "id": "start-note",
+      "x": 3120,
+      "y": -120,
+      "w": 520,
+      "text": "Start: a new badge picks a composition and a shape. The three references are the first three compositions."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

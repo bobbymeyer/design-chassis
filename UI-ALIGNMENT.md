@@ -56,6 +56,9 @@ top of the file.
 `/gallery`, behind the door and not in production, frames the same screen of
 every tool side by side — index, compose, dress — each the page the tool
 already serves, at the width it is laid out for. Drift shows there first.
+Its last row is the Badger editor as drawn: the mockup's three boards from
+`mockups/badger-editor/`, framed the same way, so a drawing that drifts from
+the tools it will join shows up beside them before it is built.
 The library's own specimen is at `/its-swiss/specimen` in development.
 
 ## What is left

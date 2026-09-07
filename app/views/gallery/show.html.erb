@@ -6,18 +6,18 @@
     <p class="hint"><%= screen.note %></p>
 
     <div class="gallery__row">
-      <% @mounts.zip(screen.paths).each do |mount, path| %>
+      <% screen.frames.each do |frame| %>
         <figure class="gallery__frame">
-          <% if path %>
+          <% if frame.path %>
             <%# Loaded at the width the tools are laid out for and scaled down,
                 so the frames compare like for like: a page narrowed to a
                 third of the screen would have stacked its registers and
                 proved nothing. %>
-            <iframe src="<%= path %>" title="<%= mount.name %>: <%= screen.name %>" loading="lazy" width="1440" height="900"></iframe>
+            <iframe src="<%= frame.path %>" title="<%= frame.name %>: <%= screen.name %>" loading="lazy" width="1440" height="900"></iframe>
           <% else %>
-            <p class="empty">Nothing in <%= mount.name %> to open yet.</p>
+            <p class="empty">Nothing in <%= frame.name %> to open yet.</p>
           <% end %>
-          <figcaption class="micro"><%= link_to mount.name, path || mount.path %><%= " — #{path}" if path %></figcaption>
+          <figcaption class="micro"><%= link_to frame.name, frame.path || frame.home %><%= " — #{frame.path}" if frame.path %></figcaption>
         </figure>
       <% end %>
     </div>
