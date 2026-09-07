@@ -14,6 +14,7 @@ class GalleryTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1.page-title", "Gallery"
+    assert_select ".page-head label.choice input.gallery__fields[type=checkbox]", 1, "the fields can be drawn over every frame"
     assert_select "section.gallery", 4
     assert_select "section.gallery h2", text: "Index"
     Chassis::Engines.all.each do |mount|

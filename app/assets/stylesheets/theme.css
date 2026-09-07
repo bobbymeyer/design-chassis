@@ -93,3 +93,31 @@
 }
 
 .gallery__frame figcaption { margin-block-start: var(--line); }
+
+/* The fields, over every frame, while the box is ticked. Drawn at the
+   frame's own size and scaled with it, so the numbers are the page's: a
+   1312 measure inset 24 either side, twelve fields on 24 gutters. The
+   tint is the accent at a twelfth, the way a grid is printed on a layout
+   sheet, and is off by default. */
+.gallery__frame { position: relative; }
+
+.gallery__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 1440px;
+  height: 900px;
+  pointer-events: none;
+  transform: scale(calc(1 / 3.5));
+  transform-origin: top left;
+  --field: calc((1312px - 48px - 11 * 24px) / 12);
+  background: repeating-linear-gradient(to right,
+    color-mix(in oklch, var(--accent) 12%, transparent) 0 var(--field),
+    transparent var(--field) calc(var(--field) + 24px));
+  background-repeat: no-repeat;
+  background-position: calc((100% - 1312px) / 2 + 24px) 0;
+  background-size: calc(1312px - 48px) 100%;
+  display: none;
+}
+
+.page:has(.gallery__fields:checked) .gallery__frame::after { display: block; }

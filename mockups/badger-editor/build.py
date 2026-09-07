@@ -43,7 +43,9 @@ FOOT = '''</x-dc>
 PAPER = "oklch(98% 0.006 95)"; SHADED = "oklch(94% 0.006 95)"; RULE = "oklch(89% 0.006 95)"; RULE_STRONG = "oklch(72% 0.006 95)"
 QUIET = "oklch(54% 0.006 95)"; INK = "oklch(18% 0.006 95)"; ACCENT = "#e30613"
 FONT = "font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;"
-W, H = 656, 528
+COL, GUT = (1312 - 48 - 11 * 24) / 12.0, 24
+FIELDS = lambda n: n * COL + (n - 1) * GUT
+W, H = int(round(FIELDS(6))), 528
 K = H / 600.0
 
 def masthead(section="Badges"):
@@ -58,7 +60,7 @@ def masthead(section="Badges"):
     return f'''<header style="display: flex; align-items: flex-end; gap: 24px 32px; padding: 24px 24px 23px; border-bottom: 1px solid {RULE}; max-width: 1312px; margin: 0 auto; box-sizing: border-box;">
   <p style="margin: 0; font-weight: 700; letter-spacing: -0.015em; white-space: nowrap; font-size: 16px; line-height: 24px;">{glyph("🎛️")}<a href="#" style="text-decoration: none; color: {INK};">Chassis</a></p>
   <nav style="display: flex; flex: 1; align-items: flex-end; gap: 24px;">
-    <details style="position: relative;"><summary style="list-style: none; cursor: pointer; white-space: nowrap; color: {ACCENT}; font-weight: 700; font-size: 16px; line-height: 24px;">{glyph("🧰")}Tools<span style="color: {QUIET}; font-weight: 400;"> ▾</span></summary></details>
+    <details style="position: relative;"><summary style="list-style: none; cursor: pointer; white-space: nowrap; color: {INK}; font-weight: 700; font-size: 16px; line-height: 24px;">{glyph("🧰")}Tools<span style="color: {QUIET}; font-weight: 400;"> ▾</span></summary></details>
     <span style="flex: 1;"></span>
     {link("Account")}
   </nav>
@@ -90,8 +92,8 @@ def segmented(options, active):
     return f'<div style="display: flex; gap: 0;">{"".join(parts)}</div>'
 
 def field(label, control, hint=None, error=None):
-    h = f'<p style="margin: 0; font-size: 12px; line-height: 24px; color: {QUIET};">{hint}</p>' if hint else ''
-    e = f'<p style="margin: 0; font-size: 12px; line-height: 24px; color: {ACCENT};">{error}</p>' if error else ''
+    h = f'<p style="margin: 0; font-size: 16px; line-height: 24px; color: {QUIET};">{hint}</p>' if hint else ''
+    e = f'<p style="margin: 0; font-size: 16px; line-height: 24px; color: {ACCENT};">{error}</p>' if error else ''
     return f'''<div style="display: flex; flex-direction: column; gap: 0; width: 100%;">
       <label style="font-size: 12px; line-height: 24px; font-weight: 700; color: {QUIET};">{label}</label>
       {control}{h}{e}
@@ -130,9 +132,9 @@ def tree(selected="STOCKHOLM"):
         row("12", "fit box · h 119", 2),
     ]
     adds = "".join(f'<button style="{FONT} font-size: 12px; line-height: 24px; border: 0; background: transparent; color: {QUIET}; padding: 0; cursor: pointer; display: flex; align-items: center; gap: 4px;">{icon(PLUS, 12, QUIET)}{l}</button>' for l in ["Region", "Type", "Child", "Artwork"])
-    return f'''<aside style="width: 224px; flex: none; display: flex; flex-direction: column; gap: 0;">
+    return f'''<aside style="width: {FIELDS(3):.0f}px; flex: none; display: flex; flex-direction: column; gap: 0;">
     <h3 style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 700;">Document</h3>
-    <p style="margin: 0 0 24px; font-size: 12px; line-height: 24px; color: {QUIET};">A tree of containers. Select a line to work on it.</p>
+    <p style="margin: 0 0 24px; font-size: 16px; line-height: 24px; color: {QUIET};">A tree of containers. Select a line to work on it.</p>
     <div style="display: flex; flex-direction: column; gap: 0; border-top: 1px solid {RULE}; border-bottom: 1px solid {RULE}; padding: 12px 0;">{"".join(rows)}</div>
     <div style="display: flex; flex-direction: column; gap: 0; padding: 12px 8px;">{adds}</div>
     <div style="flex: 1;"></div>
@@ -202,17 +204,17 @@ def swatch(hexv):
 
 def inspector_compose():
     link = lambda t: f'<a href="#" style="font-size: 12px; line-height: 24px; color: {QUIET};">{t}</a>'
-    return f'''<aside style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px;">
+    return f'''<aside style="width: {FIELDS(3):.0f}px; flex: none; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
     <div>
       <p style="margin: 0; font-size: 12px; line-height: 24px; color: {QUIET}; font-weight: 700;">Type · follows the ring</p>
       <h3 style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.015em;">STOCKHOLM</h3>
     </div>
     {field("Text", text_control("STOCKHOLM"))}
     {field("Font", pair_control("DejaVu Sans", "Regular ▾"))}
-    {field("Size answers to", f'<div style="display: flex; align-items: flex-start; gap: 16px;">{segmented(["Band", "Chord", "Fixed"], "Band")}<div style="flex: 1;">{text_control("12", "u inset")}</div></div>', hint="Cap height fills the band: 153 − 2 × 12 = 129")}
+    {field("Size answers to", f'<div style="display: flex; align-items: flex-start; gap: 16px;">{segmented(["Band", "Chord", "Fixed"], "Band")}<div style="flex: 1;">{text_control("12", "u inset")}</div></div>', hint="Cap height fills the band: 129 u")}
     {field("Sweep", f'<div style="display: flex; gap: 16px;"><div style="flex: 1;">{text_control("202", "° from")}</div><div style="flex: 1;">{text_control("338", "° to")}</div></div>')}
     {field("Set within the sweep", segmented(["Start", "Centre", "End", "Justify"], "Justify"))}
-    {field("Tracking", slider("−47", 0.12, " u"), error="Negative: the letters collide. Shorten the text, widen the sweep, or condense the face.")}
+    {field("Tracking", slider("−47", 0.12, " u"), error="Negative: the letters collide. Widen the sweep or condense the face.")}
     {field("Colour slot", pair_control(swatch("#2e2c28") + "Ink", "rank 1 of 2 ▾"))}
     <div style="flex: 1;"></div>
     <p style="margin: 0; font-size: 12px; line-height: 24px; color: {QUIET};">{link("Duplicate")} · {link("Remove")} · {link("Kern a pair")}</p>
@@ -226,7 +228,7 @@ def inspector_dress():
         sws = "".join(f'<span style="width: 12px; height: 16px; background: {c};"></span>' for c in colors)
         return f'''<div style="display: flex; align-items: center; gap: 12px; height: 24px; padding: 0 8px; {f"background: {SHADED}; box-shadow: inset 2px 0 0 {ACCENT};" if on else ""}"><span style="display: flex; width: 36px; justify-content: flex-start;"><span style="display: flex; box-shadow: inset 0 0 0 1px {RULE};">{sws}</span></span><span style="font-size: 16px; line-height: 24px; font-weight: {700 if on else 400};">{name}</span>{f'<span style="flex: 1;"></span><span style="font-size: 12px; color: {QUIET};">wearing</span>' if on else ""}</div>'''
     colorways = f'''<div style="display: flex; flex-direction: column; border-top: 1px solid {RULE}; border-bottom: 1px solid {RULE}; padding: 4px 0;">{cw("Value", ["#f8f8f8", "#101010"])}{cw("Stadion", ["#e8e2d0", "#2a1a10"], True)}{cw("Brand Core", ["#faf8f4", "#e30613", "#111111"])}{cw("Paper &amp; Ink", ["#ffffff", "#0d0d0d"])}</div>'''
-    return f'''<aside style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+    return f'''<aside style="width: {FIELDS(3):.0f}px; flex: none; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
     <div>
       <p style="margin: 0; font-size: 12px; line-height: 24px; color: {QUIET}; font-weight: 700;">Colorway · from Pandatone</p>
       <h3 style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.015em;">Stadion</h3>
@@ -253,17 +255,25 @@ def colorway_strip():
     {button("Dress from a palette…")}
   </div>'''
 
+def sections(names, current):
+    """The library's sections: a run of names under the title, the one shown
+    in the weight, in ink. Not the accent: that is for where you are on the
+    site, and this is where you are on the page."""
+    return '<nav style="display: flex; gap: 24px;">' + "".join(
+        f'<a href="#" style="text-decoration: none; font-size: 16px; line-height: 24px; color: {INK if n == current else QUIET}; font-weight: {700 if n == current else 400};">{n}</a>'
+        for n in names) + '</nav>'
+
 def page_head(title, mode):
-    return f'''<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 24px 0 23px; border-bottom: 1px solid {RULE};">
+    """The page head as the library draws it: the title and its facts, the
+    actions beside them, the sections under. No rule: the rule is the one
+    mark this style draws, and the masthead already drew one."""
+    return f'''<div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 24px 0 0;">
     <div style="display: flex; align-items: baseline; gap: 16px;">
       <h1 style="margin: 0; font-size: 32px; line-height: 48px; font-weight: 700; letter-spacing: -0.02em;">{title}</h1>
       <span style="font-size: 12px; line-height: 24px; color: {QUIET};">2 slots · 5 pieces · ink 782 × 952</span>
     </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      {segmented(["Compose", "Dress", "Export"], "Dress" if mode == "dress" else "Compose")}
-      <span style="width: 16px;"></span>
-      {button("Save", primary=True)}
-    </div>
+    {button("Save", primary=True)}
+    <div style="flex-basis: 100%;">{sections(["Compose", "Dress", "Export"], "Dress" if mode == "dress" else "Compose")}</div>
   </div>'''
 
 def page(mode):

@@ -51,6 +51,35 @@ top of the file.
   document. What a badge lays out. The editor canvas that is mocked in the
   Badger Editor design is Badger's until a second tool wants a canvas.
 
+## A day of use
+
+The second review, after a day inside the tools: what daily use asks of a
+style is less talk and one red. Four rules, kept by its-swiss 0.9 and every
+tool on it.
+
+- **A working page does not scroll.** A page with several surfaces names
+  them under its title — `page_head(sections:)` — and shows one at a time:
+  the pattern page is Compose, Finish, Dress, Export; the badge page
+  Compose, Dress, Export; the palette page Swatches, Export. The drawing
+  and what is true of it stay in the left column and stay put. What is done
+  daily is in the head, in the same position on every page, and each action
+  returns to the surface it lives on.
+- **Say each thing once.** The sentence over every table is behind one
+  mark — `explain` — opened when it is asked for. A column that says the
+  same thing four times is not information: a colorway lists only the slots
+  bound to something other than their rank, and a repeat of equal stripes
+  says so in a word and shows no width column.
+- **One red per page.** The accent is for where you are on the site — the
+  nav, the subnav, the page numbers — and for the one thing that cannot be
+  undone. Where you are on a page, in a menu, in a filter is the weight, in
+  ink.
+- **One meaning per register.** A hint is prose and set at body size; a
+  label is small, bold, on the line. The filter block is ruled once, below.
+
+The gallery draws the twelve fields over every frame when asked, so a page
+that fills half its measure shows as half. The mockup is on the same fields:
+three for the tree, six for the canvas, three for the inspector.
+
 ## Seeing it
 
 `/gallery`, behind the door and not in production, frames the same screen of
