@@ -26,6 +26,8 @@ class StripeclubTest < ActionDispatch::IntegrationTest
     assert_select "nav.nav a[aria-current=page][href='/stripeclub']", text: "Stripeclub"
     # The engine's own stylesheet, through the chassis's head.
     assert_select "link[rel=stylesheet][href*='stripeclub/components']"
+    assert_select "link[rel=stylesheet][href*='pandatone/dresser']"
+    assert_select "header.page-head h1.page-title", text: "Patterns"
   end
 
   # The sibling stays reachable and unselected: two engines mounted at once
@@ -80,52 +82,43 @@ class StripeclubTest < ActionDispatch::IntegrationTest
 
   # --- The two tools together ------------------------------------------------
 
-  # The point of one process. Stripeclub knows Pandatone by its wire format
-  # and by nothing else, so this is the whole of the contract between them:
-  # what config/initializers/stripeclub.rb hands over has to be what
-  # Pandatone's API would have sent, down to the shape of the keys.
-  #
-  # String keys, because the wire format is JSON's and that is the contract
-  # the engine publishes. It would in fact cope with symbols — it normalizes
-  # what it is handed — but that is a tolerance inside the engine, not a
-  # promise, and this test pins the chassis to the promise.
-  test "the palettes Stripeclub is handed are Pandatone's, in Pandatone's wire format" do
+  # The point of one process. Stripeclub dresses a pattern through Pandatone's
+  # own dresser, which with no PANDATONE_URL asks the Pandatone in this
+  # process through its public methods — so a palette written into Pandatone
+  # over REST is on Stripeclub's picker with nothing in the chassis between
+  # them. The chassis used to hand over a lambda; it hands over nothing now,
+  # and this is the test that it need not.
+  test "a palette written into Pandatone is on Stripeclub's picker, on the ladder" do
     post "/pandatone/api/v1/palettes", headers: bearer, as: :json, params: {
       palette: { name: "Brand Core", tags: %w[ brand active ],
-                 colors: [ { name: "signal-red", hex: "#E30613" },
-                           { name: "ink-black", hex: "#111111" } ] }
+                 colors: [ { name: "signal-red", hex: "#E30613" }, { name: "ink-black", hex: "#111111" } ] }
     }
     assert_response :created
 
-    palettes = Stripeclub.palette_source.call
-    palette = palettes.sole
+    sign_in_as users(:one)
+    post "/stripeclub/patterns", params: { pattern: { name: "Awning", slot_count: 2, angle: 90 } }
+    pattern = Stripeclub.patterns.sole
 
-    assert_equal %w[ id name tags colors ].sort, palette.keys.sort
-    assert_equal "Brand Core", palette["name"]
-    assert_equal %w[ brand active ], palette["tags"]
+    get "/stripeclub/patterns/#{pattern[:id]}/colorways/new?refresh=1"
 
-    # Summaries carry no colors, so a source that only listed would hand over
-    # palettes with nothing in them. These are the full reads.
-    assert_equal [ "signal-red", "ink-black" ], palette["colors"].map { |color| color["name"] }
-    assert_equal [ "#E30613", "#111111" ], palette["colors"].map { |color| color["hex"] }
+    assert_response :success
+    assert_select "section.palettes:first-of-type tbody tr", 1
+    assert_select "section.palettes:first-of-type td", text: "Brand Core"
+    greys = css_select(".palette-swatch").map { |swatch| swatch["style"][/#\h{6}/] }
+    assert_equal 2, greys.size
+    assert_equal greys.sort.reverse, greys, "the strip runs lightest first"
+    assert_not_includes greys, "#E30613", "the picker shows value, not hue"
   end
 
-  # Deep, not shallow: the channels are a hash inside a hash inside an array,
-  # and it is the innermost one the engine reaches into to rank a palette by
-  # how light each color looks. A shallow conversion would satisfy the test
-  # above and still not be the wire format.
-  test "the wire format is string-keyed all the way down" do
-    post "/pandatone/api/v1/palettes", headers: bearer, as: :json,
-      params: { palette: { name: "Brand Core", colors: [ { name: "signal-red", hex: "#E30613" } ] } }
+  test "a Pandatone with no palettes is an empty picker, not an error" do
+    sign_in_as users(:one)
+    post "/stripeclub/patterns", params: { pattern: { name: "Awning", slot_count: 2, angle: 90 } }
+    pattern = Stripeclub.patterns.sole
 
-    color = Stripeclub.palette_source.call.sole["colors"].sole
+    get "/stripeclub/patterns/#{pattern[:id]}/colorways/new?refresh=1"
 
-    assert_equal Pandatone.palette("Brand Core")[:colors].sole[:rgb].transform_keys(&:to_s), color["rgb"]
-    assert color["rgb"].keys.all?(String), "the channels arrived as #{color["rgb"].keys.inspect}"
-  end
-
-  test "a palette the chassis has none of is an empty catalogue, not an error" do
-    assert_equal [], Stripeclub.palette_source.call
+    assert_response :success
+    assert_select "section.palettes .empty", text: "None."
   end
 
   private

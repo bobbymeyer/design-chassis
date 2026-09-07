@@ -1,0 +1,25 @@
+<%= page_head "Gallery", lede: "The same screen of every tool, side by side. Each frame is the page the tool serves; what drifts apart shows here first." %>
+
+<% @screens.each do |screen| %>
+  <section class="gallery">
+    <h2><%= screen.name %></h2>
+    <p class="hint"><%= screen.note %></p>
+
+    <div class="gallery__row">
+      <% @mounts.zip(screen.paths).each do |mount, path| %>
+        <figure class="gallery__frame">
+          <% if path %>
+            <%# Loaded at the width the tools are laid out for and scaled down,
+                so the frames compare like for like: a page narrowed to a
+                third of the screen would have stacked its registers and
+                proved nothing. %>
+            <iframe src="<%= path %>" title="<%= mount.name %>: <%= screen.name %>" loading="lazy" width="1440" height="900"></iframe>
+          <% else %>
+            <p class="empty">Nothing in <%= mount.name %> to open yet.</p>
+          <% end %>
+          <figcaption class="micro"><%= link_to mount.name, path || mount.path %><%= " — #{path}" if path %></figcaption>
+        </figure>
+      <% end %>
+    </div>
+  </section>
+<% end %>

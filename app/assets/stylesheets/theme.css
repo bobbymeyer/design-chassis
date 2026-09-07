@@ -59,3 +59,36 @@
    go, which is the one line its-swiss says an application writes for this. */
 .masthead .nav { flex: 1; }
 .nav form.button_to { margin-inline-start: auto; }
+
+/* --- The gallery ---------------------------------------------------------
+   Three tools' pages at the width they are laid out for, scaled to sit
+   side by side. The frame is a fixed box of whole lines and the page inside
+   it is scaled from its top left corner, so the three compare like for
+   like. Development only, like the specimen. */
+.gallery { margin-block-start: var(--line-2); }
+
+.gallery__row {
+  display: flex;
+  gap: var(--gutter);
+  margin-block-start: var(--line);
+}
+
+.gallery__frame {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+}
+
+.gallery__frame iframe {
+  display: block;
+  width: 1440px;
+  height: 900px;
+  border: var(--rule-hair) solid var(--rule);
+  transform: scale(calc(1 / 3.5));
+  transform-origin: top left;
+  /* The scaled box still occupies its unscaled size in the flow; this takes
+     the difference back so the caption sits under the picture. */
+  margin-block-end: calc(900px * (1 / 3.5) - 900px);
+}
+
+.gallery__frame figcaption { margin-block-start: var(--line); }

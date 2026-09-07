@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_06_100002) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_07_100003) do
   create_table "badger_badges", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -41,10 +41,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_06_100002) do
     t.integer "colorway_id", null: false
     t.datetime "created_at", null: false
     t.string "kind", null: false
+    t.integer "rank", null: false
     t.json "settings", default: {}, null: false
-    t.integer "slot", null: false
     t.datetime "updated_at", null: false
-    t.index ["colorway_id", "slot"], name: "index_badger_slot_rules_on_colorway_id_and_slot", unique: true
+    t.index ["colorway_id", "rank"], name: "index_badger_slot_rules_on_colorway_id_and_rank", unique: true
     t.index ["colorway_id"], name: "index_badger_slot_rules_on_colorway_id"
   end
 
