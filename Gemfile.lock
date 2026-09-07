@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
   revision: 7367e66592e472dcf5f5a605252422f5cc16b01e
-  ref: 7367e66
+  tag: v0.5.0
   specs:
     badger (0.5.0)
       rexml (~> 3.2)
