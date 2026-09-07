@@ -19,7 +19,7 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_select ".empty", false
-    assert_select "dl.pairs dt a[href='/pandatone']", "Pandatone"
+    assert_select "dl.pairs dt a[href='/pandatone']", text: /🐼\s*Pandatone/
     assert_select "dl.pairs dd", "/pandatone"
   end
 
@@ -29,7 +29,7 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     Chassis::Engines.all.each do |mount|
-      assert_select "a[href=?]", mount.path, text: mount.name
+      assert_select "a[href=?]", mount.path, text: /#{mount.mark}\s*#{mount.name}/
     end
   end
 end

@@ -31,14 +31,34 @@ class ShellTest < ActionDispatch::IntegrationTest
     assert_select ".masthead__mark", text: /\A\s*🎛️\s*Chassis\s*\z/
   end
 
-  test "the nav is the engine list, the account, and a way out" do
+  # The tools in a menu, each with its mark; you at the far end; the way out
+  # on the account page, with the rest of what is yours.
+  test "the nav is the tools, in a menu, and the account" do
     assert_select "nav.nav" do
+      assert_select "details.menu > summary", text: /Tools/
       Chassis::Engines.all.each do |mount|
-        assert_select "a[href=?]", mount.path, text: mount.name
+        assert_select "details.menu a[href=?]", mount.path, text: /#{mount.mark}\s*#{mount.name}/
+        assert_select "details.menu a[href=?] .glyph[aria-hidden=true]", mount.path, text: mount.mark
       end
-      assert_select "a[href=?]", account_path, text: "Account"
-      assert_select "form[action=?] button", session_path, text: "Sign out"
+      assert_select "a.nav__account[href=?]", account_path, text: "Account"
+      assert_select "form[action=?]", session_path, false
     end
+  end
+
+  test "the way out is on the account page" do
+    get account_path
+    assert_select "header.page-head form[action=?] button", session_path, text: "Sign out"
+  end
+
+  # Outside a tool there is no second layer; inside one, the band carries
+  # the tool's mark and the sections the tool offers.
+  test "the subnav appears inside a tool and not outside one" do
+    assert_select "nav.subnav", false
+
+    get "/pandatone"
+    assert_select "nav.subnav a.subnav__mark[href='/pandatone']", text: /🐼\s*Pandatone/
+    assert_select "nav.subnav a", text: "Palettes"
+    assert_select "nav.nav details.menu.menu--current a[href='/pandatone'][aria-current=page]"
   end
 
   test "the typeface is the chassis's, self-hosted, under the faces and under its own name" do

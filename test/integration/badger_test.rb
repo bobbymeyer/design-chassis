@@ -19,7 +19,7 @@ class BadgerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "h1", "Badges"
     assert_select ".masthead__mark a", text: "Chassis"
-    assert_select "nav.nav a[aria-current=page][href='/badger']", text: "Badger"
+    assert_select "nav.nav a[aria-current=page][href='/badger']", text: /Badger/
     assert_select "link[rel=stylesheet][href*='badger/components']"
     assert_select "link[rel=stylesheet][href*='pandatone/dresser']"
     assert_select "header.page-head h1.page-title", text: "Badges"
@@ -30,7 +30,7 @@ class BadgerTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
     get "/badger"
 
-    assert_select "nav.nav a[href='/pandatone']", text: "Pandatone"
+    assert_select "nav.nav a[href='/pandatone']", text: /Pandatone/
     assert_select "nav.nav a[href='/stripeclub'][aria-current]", false
   end
 

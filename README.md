@@ -42,7 +42,7 @@ In development the its-swiss specimen is at `/its-swiss/specimen`.
 | The tools | `/pandatone` — Pandatone, the palette library, from `bobbymeyer/pandatone`; `/stripeclub` — Stripeclub; `/badger` — Badger, the badge generator, two gems from one git block of `bobbymeyer/badger`. Until each 0.2.0 is tagged the Gemfile takes them from branches |
 | The gallery | `/gallery`, behind the door and not in production: the same screen of every tool side by side. `UI-ALIGNMENT.md` says what was aligned and where each pattern lives |
 | The door | `app/controllers/{sessions,passwords,registrations}_controller.rb` for people, `api_controller.rb` for scripts, `accounts_controller.rb` for the token |
-| The shell | `app/views/layouts/application.html.erb` fills its-swiss's slots: mark, nav, footer. An engine's layout renders it and adds its `:sections` to the nav |
+| The shell | `app/views/layouts/application.html.erb` fills its-swiss's slots: mark, nav, subnav, footer. The tools sit in the nav's 🧰 Tools menu, each with its mark; an engine's layout renders the shell and adds its `:sections` to the subnav, the shaded band under the masthead |
 | The theme | `app/assets/stylesheets/theme.css` and the typeface in the layout: Archivo, the accent, the warm greys, for every tool at once |
 | The scale it is weighed on | `test/architecture/thin_chassis_test.rb` |
 

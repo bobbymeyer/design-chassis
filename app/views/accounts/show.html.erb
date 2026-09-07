@@ -1,9 +1,8 @@
 <% content_for :title, "Account" %>
 
-<header>
-  <h1 class="page-title">Account</h1>
-  <p class="lede">Signed in as <%= @user.email_address %>.</p>
-</header>
+<%= page_head "Account", lede: "Signed in as #{@user.email_address}." do %>
+  <%= button_to "Sign out", session_path, method: :delete, class: "button" %>
+<% end %>
 
 <section>
   <h2>API token</h2>

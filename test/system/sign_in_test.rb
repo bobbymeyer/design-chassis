@@ -7,6 +7,7 @@ class SignInTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Chassis"
     assert_selector "dl.pairs a", text: "Pandatone"
 
+    click_on "Account"
     click_on "Sign out"
 
     assert_selector "h1", text: "Sign in"

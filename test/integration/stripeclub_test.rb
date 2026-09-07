@@ -23,7 +23,7 @@ class StripeclubTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Patterns"
     # The chassis's shell around the engine's page.
     assert_select ".masthead__mark a", text: "Chassis"
-    assert_select "nav.nav a[aria-current=page][href='/stripeclub']", text: "Stripeclub"
+    assert_select "nav.nav a[aria-current=page][href='/stripeclub']", text: /Stripeclub/
     # The engine's own stylesheet, through the chassis's head.
     assert_select "link[rel=stylesheet][href*='stripeclub/components']"
     assert_select "link[rel=stylesheet][href*='pandatone/dresser']"
@@ -36,7 +36,7 @@ class StripeclubTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
     get "/stripeclub"
 
-    assert_select "nav.nav a[href='/pandatone']", text: "Pandatone"
+    assert_select "nav.nav a[href='/pandatone']", text: /Pandatone/
     assert_select "nav.nav a[href='/pandatone'][aria-current]", false
   end
 
@@ -44,7 +44,6 @@ class StripeclubTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
     get "/stripeclub"
 
-    assert_select "nav.nav form[action='/session'] button", text: "Sign out"
     assert_select "nav.nav a[href='/account']", text: "Account"
   end
 

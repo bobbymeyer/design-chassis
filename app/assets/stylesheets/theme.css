@@ -47,18 +47,22 @@
   --line: 1.5rem;
 }
 
-/* The one picture in the chrome, and it is kept to the value scale like
-   everything else. */
-.masthead__knobs {
+/* The pictures in the chrome — the knobs, and each tool's mark — kept to
+   the value scale like everything else. */
+.masthead__knobs,
+.glyph {
   margin-inline-end: var(--space-1);
   filter: grayscale(1);
 }
 
-/* The destinations sit beside the mark; the way out sits at the far edge.
-   The nav takes the rest of the masthead so the sign-out has somewhere to
+/* The tools sit beside the mark, in their menu; you sit at the far edge.
+   The nav takes the rest of the masthead so the account has somewhere to
    go, which is the one line its-swiss says an application writes for this. */
 .masthead .nav { flex: 1; }
-.nav form.button_to { margin-inline-start: auto; }
+.nav .nav__account { margin-inline-start: auto; }
+
+/* The tool's own mark leads its band, in the weight of a wordmark. */
+.subnav__mark { font-weight: 700; }
 
 /* --- The gallery ---------------------------------------------------------
    Three tools' pages at the width they are laid out for, scaled to sit
