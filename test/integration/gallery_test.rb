@@ -22,41 +22,25 @@ class GalleryTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # The editor is weighed on the same page as the pages: the last row is the
-  # two surfaces Badger serves and the one board of the design not yet built,
-  # a bare page of the chassis's own.
-  test "the gallery frames the Badger editor, built and as drawn" do
+  # The editor is the last row: the start of a badge, the Compose surface
+  # and the Dress surface, each the page Badger serves. The boards it was
+  # drawn as have all left the row, each replaced by its page.
+  test "the gallery frames the Badger editor as built" do
     sign_in_as users(:one)
-    post "/badger/badges", params: { badge: { name: "Kiruna",
-      spec_yaml: "shape: { kind: circle, radius: 80 }\nregions: [ { kind: rule, distance: 0, weight: 4 } ]\n" } }
+    post "/badger/badges", params: { badge: { name: "Kiruna", composition: "ring", shape: "circle" } }
     badge = Badger.badges.sole
     get "/gallery"
 
     assert_select "section.gallery:last-of-type h2", text: "Editor"
+    assert_select "section.gallery:last-of-type iframe[src='/badger/badges/new']", 1
     assert_select "section.gallery:last-of-type iframe[src='/badger/badges/#{badge[:id]}']", 1
     assert_select "section.gallery:last-of-type iframe[src=?]", "/badger/badges/#{badge[:id]}?section=dress", 1
-    assert_select "section.gallery:last-of-type iframe[src='/gallery/badger-editor/start']", 1
-    assert_select "section.gallery:last-of-type iframe[src='/gallery/badger-editor/compose']", 0, "the built page stands in for its board"
+    assert_select "iframe[src^='/gallery/badger-editor']", 0, "nothing of the mockup is framed"
   end
 
-  test "a board is the mockup in a page that declares the typeface and nothing else" do
+  test "the mockup's boards are no longer served" do
     sign_in_as users(:one)
-    get "/gallery/badger-editor/dress"
-
-    assert_response :success
-    assert_select "style", text: /Archivo/
-    assert_select ".masthead", 0
-    assert_select "h1", text: "Stockholm Stadion"
-    assert_select "img[src='/gallery/badger-editor/stockholm.jpg']", 1
-
-    get "/gallery/badger-editor/stockholm.jpg"
-    assert_response :success
-    assert_equal "image/jpeg", response.media_type
-  end
-
-  test "there are three boards and no others" do
-    sign_in_as users(:one)
-    get "/gallery/badger-editor/inspector"
+    get "/gallery/badger-editor/start"
     assert_response :not_found
   end
 
@@ -67,7 +51,7 @@ class GalleryTest < ActionDispatch::IntegrationTest
     get "/gallery"
 
     assert_select "section.gallery:nth-of-type(3) .empty", minimum: 1
-    assert_select "section.gallery:last-of-type .empty", 2, "no badge, no editor to open; the board is still drawn"
-    assert_select "section.gallery:last-of-type iframe[src='/gallery/badger-editor/start']", 1
+    assert_select "section.gallery:last-of-type .empty", 2, "no badge, nothing to compose or dress; the start is still there"
+    assert_select "section.gallery:last-of-type iframe[src='/badger/badges/new']", 1
   end
 end

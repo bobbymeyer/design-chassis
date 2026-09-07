@@ -8,18 +8,14 @@
 # once. What it reads of each is its public Ruby methods, to find something
 # to open, and nothing else.
 #
-# The last row is the Badger editor: the Compose and Dress surfaces the tool
-# serves, beside the one board of its design that is not built yet. The
-# boards are the design's, not a tool's, and a board is framed here so the
-# drawing is weighed on the same page as the pages — a mockup that drifts
-# from the tools it will join is drift too. A board that has been built
-# leaves the row, and the built page takes its place.
+# The last row is the Badger editor: the start of a badge, the Compose
+# surface and the Dress surface, each the page Badger serves. The editor
+# was drawn before it was built, as boards in mockups/badger-editor/, and
+# each board left this row as its page arrived; the boards stay in the
+# repository as the record of what was drawn.
 class GalleryController < ApplicationController
   Screen = Data.define(:name, :note, :frames)
   Frame = Data.define(:name, :path, :home)
-
-  MOCKUP = Rails.root.join("mockups/badger-editor")
-  BOARDS = %w[ compose dress start ].freeze
 
   def show
     @screens = [
@@ -31,27 +27,13 @@ class GalleryController < ApplicationController
         first_palette_path, first_dress_path("/stripeclub/patterns", Stripeclub.patterns),
         first_dress_path("/badger/badges", Badger.badges)),
       Screen.new(name: "Editor",
-        note: "The Badger editor as built, Compose and Dress, beside the one board of its design still to build: the start of a badge, as drawn.",
+        note: "The Badger editor: a badge started from a composition on a shape, composed as a drawing with its construction as the controls, and dressed.",
         frames: [
+          Frame.new(name: "Start", path: "/badger/badges/new", home: "/badger"),
           Frame.new(name: "Compose", path: first_badge_path, home: "/badger"),
-          Frame.new(name: "Dress", path: first_badge_path && "#{first_badge_path}?section=dress", home: "/badger"),
-          Frame.new(name: "Start, as drawn", path: "/gallery/badger-editor/start", home: "/badger")
+          Frame.new(name: "Dress", path: first_badge_path && "#{first_badge_path}?section=dress", home: "/badger")
         ])
     ]
-  end
-
-  # One board of the mockup, bare: the drawing inside a page that declares the
-  # typeface and nothing else, so the frame shows the board and not a shell
-  # around a shell.
-  def board
-    raise ActionController::RoutingError, "No such board" unless BOARDS.include?(params[:board])
-
-    render html: MOCKUP.join("boards/#{params[:board]}.html").read.html_safe, layout: "board" # rubocop:disable Rails/OutputSafety -- the mockup's own HTML, from the repository
-  end
-
-  # The reference photograph the Dress board wears at half strength.
-  def reference
-    send_file MOCKUP.join("stockholm.jpg"), type: "image/jpeg", disposition: "inline"
   end
 
   private

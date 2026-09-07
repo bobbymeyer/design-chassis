@@ -8,10 +8,6 @@ Rails.application.routes.draw do
   # page nobody is meant to read.
   unless Rails.env.production?
     get "gallery" => "gallery#show"
-    # The Badger editor as drawn: the mockup's boards, served bare so the
-    # gallery can frame them beside the pages the tools serve.
-    get "gallery/badger-editor/stockholm.jpg" => "gallery#reference"
-    get "gallery/badger-editor/:board" => "gallery#board", as: :gallery_board
   end
 
   # The tools. Each is a whole application at its own path, and the list of
