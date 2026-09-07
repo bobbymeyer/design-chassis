@@ -16,7 +16,7 @@ module Chassis
     # the gem is bundled, and a list of what to mount has to be readable
     # before anything is.
     # The mark is an emoji, the way the chassis's own is: one glyph a tool is
-    # known by in the nav and on the bay, drawn in grey like the knobs.
+    # known by in the nav and on the bay, in its own colour like the knobs.
     Mount = Data.define(:name, :mark, :path, :engine) do
       def constant = engine.constantize
 

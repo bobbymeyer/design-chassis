@@ -47,13 +47,10 @@
   --line: 1.5rem;
 }
 
-/* The pictures in the chrome — the knobs, and each tool's mark — kept to
-   the value scale like everything else. */
+/* The pictures in the chrome — the knobs, and each tool's mark — in their
+   own colours: the one place on the page that is, and small enough to be. */
 .masthead__knobs,
-.glyph {
-  margin-inline-end: var(--space-1);
-  filter: grayscale(1);
-}
+.glyph { margin-inline-end: var(--space-1); }
 
 /* The tools sit beside the mark, in their menu; you sit at the far edge.
    The nav takes the rest of the masthead so the account has somewhere to
