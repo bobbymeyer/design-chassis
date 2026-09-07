@@ -1,15 +1,15 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
-  revision: 7367e66592e472dcf5f5a605252422f5cc16b01e
-  tag: v0.5.0
+  revision: 5cf8ecc9eadd4c323b88914197656c7badde5a0e
+  branch: swiss-1
   specs:
-    badger (0.5.0)
+    badger (0.6.0)
       rexml (~> 3.2)
-    badger-rails (0.5.0)
-      badger (= 0.5.0)
+    badger-rails (0.6.0)
+      badger (= 0.6.0)
       importmap-rails (>= 2.0, < 4)
-      its-swiss (~> 0.9)
-      pandatone (>= 0.3)
+      its-swiss (~> 1.0)
+      pandatone (>= 0.4)
       propshaft (>= 1.0, < 3)
       rails (>= 8.0, < 9)
       stimulus-rails (>= 1.3, < 2)
@@ -17,12 +17,12 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/pandatone.git
-  revision: f7e657268b43e34484e0dc6edf5782102ef060aa
-  tag: v0.3.0
+  revision: c7f09b430145de4e03b76239d49622fa7d882633
+  branch: swiss-1
   specs:
-    pandatone (0.3.0)
+    pandatone (0.4.0)
       importmap-rails (>= 2.0, < 4)
-      its-swiss (~> 0.9)
+      its-swiss (~> 1.0)
       propshaft (>= 1.0, < 3)
       rails (>= 8.0, < 9)
       stimulus-rails (>= 1.3, < 2)
@@ -30,14 +30,14 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/stripeclub.git
-  revision: 37a4b2265ae4d9216688d3e3920d2583846f716d
-  tag: v0.3.0
+  revision: 51a870ad2338299507b400d034b52afd957ff5eb
+  branch: swiss-1
   specs:
-    stripeclub (0.3.0)
+    stripeclub (0.4.0)
       chunky_png (~> 1.4)
       importmap-rails (>= 2.0, < 4)
-      its-swiss (~> 0.9)
-      pandatone (>= 0.3)
+      its-swiss (~> 1.0)
+      pandatone (>= 0.4)
       propshaft (>= 1.0, < 3)
       rails (>= 8.0, < 9)
       stimulus-rails (>= 1.3, < 2)
@@ -190,7 +190,7 @@ GEM
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    its-swiss (0.9.1)
+    its-swiss (1.0.0)
       actionview (>= 8.0, < 10)
       importmap-rails (>= 2.0, < 4)
       propshaft (>= 1.0, < 3)
@@ -459,7 +459,7 @@ DEPENDENCIES
   debug
   image_processing (~> 1.2)
   importmap-rails
-  its-swiss (~> 0.9.1)
+  its-swiss (~> 1.0)
   jbuilder
   kamal
   pandatone!
@@ -494,8 +494,8 @@ CHECKSUMS
   activesupport (8.1.3.1) sha256=85458765f25ea48b9019c46b6bb3fa5683197bf4280d9f06710a6e8d7a831376
   addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
-  badger (0.5.0)
-  badger-rails (0.5.0)
+  badger (0.6.0)
+  badger-rails (0.6.0)
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bcrypt (3.1.22) sha256=1f0072e88c2d705d94aff7f2c5cb02eb3f1ec4b8368671e19112527489f29032
   bcrypt_pbkdf (1.1.2) sha256=c2414c23ce66869b3eb9f643d6a3374d8322dfb5078125c82792304c10b94cf6
@@ -535,7 +535,7 @@ CHECKSUMS
   importmap-rails (2.2.3) sha256=7101be2a4dc97cf1558fb8f573a718404c5f6bcfe94f304bf1f39e444feeb16a
   io-console (0.9.2) sha256=efa74f891dd03c0939a931dfc6e74c2813d904763d456ea9762b0525e748db08
   irb (1.18.0) sha256=de9454a0703a54704b9811a5ef31a60c86949fbf4013fcf244fabc7c775248e3
-  its-swiss (0.9.1) sha256=2c60f9fbe2da5d47ded86751949dd826055075aa1c2c2f399d7d3e9466e1e9ad
+  its-swiss (1.0.0) sha256=6e90c05d8ccb443e447304345e8b5769de32142019d189b423778356714bc8fe
   jbuilder (2.15.1) sha256=2430bec28fb0cebacb5875b1009cf9d8bc3c303ccb810c4c8b062a4b51457637
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   kamal (2.12.0) sha256=c51d1ab085e515470f98d0c0f043637122b5ebf76e8b610cb1fbbed0b7f9b8fa
@@ -567,7 +567,7 @@ CHECKSUMS
   nokogiri (1.19.4-x86_64-linux-gnu) sha256=379fae440b28915e3f19d752ce2dcf8465ed2b2fbefd2a7ca0dd497bc981a06a
   nokogiri (1.19.4-x86_64-linux-musl) sha256=17dfb7c1fa194ae02fbf7c51a7afc8d278045ab3fdacfd86f91d02d7b274470b
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
-  pandatone (0.3.0)
+  pandatone (0.4.0)
   parallel (2.1.0) sha256=b35258865c2e31134c5ecb708beaaf6772adf9d5efae28e93e99260877b09356
   parser (3.3.12.0) sha256=21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
@@ -616,7 +616,7 @@ CHECKSUMS
   sqlite3 (2.9.6-x86_64-linux-musl) sha256=d493b11818a3573387a1d56e1ee8fa00da23a683a7a1cc063e7a0feeed843abf
   sshkit (1.25.1) sha256=be3f10b9d6eb0b44d5eaba3f7cbe41bc6bb894bce4339688ac20124391455b78
   stimulus-rails (1.3.4) sha256=765676ffa1f33af64ce026d26b48e8ffb2e0b94e0f50e9119e11d6107d67cb06
-  stripeclub (0.3.0)
+  stripeclub (0.4.0)
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   thruster (0.1.26) sha256=6e45e807086b29d51404841bd1ad493b67cd95892fd65dc5afcdd32e82e94ce8
   thruster (0.1.26-aarch64-linux) sha256=2171cb34928c0250830008f535c4ab2ee57846cc3f5d3e96c3475f7b3de7a541
