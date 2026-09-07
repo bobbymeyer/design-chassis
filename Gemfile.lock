@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
-  revision: b3f80ab79b5f7345e5505261926f7b9e384f563a
-  branch: claude/badger-handoff-bmcsi3
+  revision: c36cae47d38283c6f21b979d12453af8dece36e4
+  branch: main
   specs:
     badger (0.2.0)
       rexml (~> 3.2)
@@ -41,8 +41,8 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/stripeclub.git
-  revision: 75d87640949229b9d65239fe4d70dab2e8ef7b43
-  branch: claude/ui-alignment
+  revision: b26beca27897a7bf35d11460e447f69def385e39
+  branch: main
   specs:
     stripeclub (0.2.0)
       chunky_png (~> 1.4)
