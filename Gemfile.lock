@@ -17,8 +17,8 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/its-swiss.git
-  revision: 517102e60d69607ca512a5b098614d52e3292eb9
-  branch: page-head-and-indexes
+  revision: bcaedd12b654c77e7e472c9a67b13d9a17ac429b
+  branch: main
   specs:
     its-swiss (0.8.0)
       actionview (>= 8.0, < 10)

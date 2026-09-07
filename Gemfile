@@ -18,7 +18,7 @@ gem "stimulus-rails"
 # footer, the value scale [https://github.com/bobbymeyer/its-swiss]
 # its-swiss 0.8 is not on RubyGems yet; until it is, the chassis takes it
 # from the branch that carries it. Back to a version when it is released.
-gem "its-swiss", github: "bobbymeyer/its-swiss", branch: "page-head-and-indexes"
+gem "its-swiss", github: "bobbymeyer/its-swiss", branch: "main"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
