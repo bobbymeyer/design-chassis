@@ -27,7 +27,10 @@ class GalleryTest < ActionDispatch::IntegrationTest
   # drawn as have all left the row, each replaced by its page.
   test "the gallery frames the Badger editor as built" do
     sign_in_as users(:one)
-    post "/badger/badges", params: { badge: { name: "Kiruna", composition: "ring", shape: "circle" } }
+    # A badge with no type in it: the row needs a badge to open, and the
+    # type sidecar is not part of this suite.
+    post "/badger/badges", params: { badge: { name: "Kiruna",
+      spec_yaml: "shape: { kind: circle, radius: 80 }\nregions: [ { kind: rule, distance: 0, weight: 4 } ]\n" } }
     badge = Badger.badges.sole
     get "/gallery"
 
