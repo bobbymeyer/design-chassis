@@ -7,9 +7,13 @@ name: Tools
 # now, runs the suite against them, and pushes when it passes. Nobody bumps
 # anything, and a tool that breaks the chassis leaves main on the last good
 # revision with a red run to look at.
+#
+# Each tool asks for this when it merges to main, through the Chassis
+# workflow in its own repository. There was an hourly schedule here; it never
+# once fired, through four slots, while every dispatched run worked.
 on:
-  schedule:
-    - cron: "23 * * * *"
+  repository_dispatch:
+    types: [ tool-updated ]
   workflow_dispatch:
 
 concurrency:
@@ -24,6 +28,15 @@ jobs:
       contents: write
 
     steps:
+      # The payload is our own, from our own repositories, but it is still
+      # input: it goes in the environment rather than into a shell line.
+      - name: Who asked
+        if: github.event_name == 'repository_dispatch'
+        env:
+          TOOL: ${{ github.event.client_payload.tool }}
+          MOVED_TO: ${{ github.event.client_payload.sha }}
+        run: echo "$TOOL moved to $MOVED_TO"
+
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
 
