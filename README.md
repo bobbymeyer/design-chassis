@@ -62,16 +62,15 @@ from the default branch of the engine's repository (engines are not
 published to RubyGems), the line above, a `bin/rails db:migrate`, and a test
 in `test/lib/chassis/engines_test.rb` that asserts the mount. `Gemfile.lock`
 is committed and holds the revision each engine is on, so a deploy is
-reproducible without a tag. Nobody moves it by hand: a tool's own Chassis
-workflow asks for this when it merges to main, and
-`.github/workflows/tools.yml` takes the tools as they are, runs the suite and
-the system tests against them and pushes the lock when they pass — so an
-update to any tool reaches the chassis on its own, and a tool that breaks it
-leaves main on the last good revision with a red run to look at. The ask is a
-`repository_dispatch`, which needs a token with `Contents: write` here, held
-as `CHASSIS_DISPATCH_TOKEN` in each tool's repository. Name the branch rather than leaving
-the ref off: with no ref, Bundler resolves whatever the cached clone's HEAD
-happens to be, which is not necessarily the repository's default branch.
+reproducible without a tag. Nobody moves it by hand: `.github/workflows/tools.yml`
+takes the tools as they are, runs the suite and the system tests against them
+and pushes the lock when they pass — so an update to any tool reaches the
+chassis on its own, and a tool that breaks it leaves main on the last good
+revision with a red run to look at. It runs hourly, on every push here, and
+by hand. The tools need no credential here and hold no secret: the chassis
+asks, rather than being told. Name the branch rather than leaving the ref
+off: with no ref, Bundler resolves whatever the cached clone's HEAD happens
+to be, which is not necessarily the repository's default branch.
 
 What an engine gets from the chassis, and all it gets: a controller to
 inherit from for its screens and one for its API, both of which decide who is

@@ -8,12 +8,26 @@ name: Tools
 # anything, and a tool that breaks the chassis leaves main on the last good
 # revision with a red run to look at.
 #
-# Each tool asks for this when it merges to main, through the Chassis
-# workflow in its own repository. There was an hourly schedule here; it never
-# once fired, through four slots, while every dispatched run worked.
+# Three ways in, all of them here, none of them needing a credential the
+# tools do not already have:
+#
+#   schedule  hourly, off the hour: high load is at :00 and a scheduled run
+#             is best-effort, so it can arrive late or not at all. That is
+#             fine for this job — the next hour catches whatever the last
+#             one missed, and the work is idempotent. It is not fine as the
+#             only trigger, which is why there are two more. Note that a
+#             newly registered cron often skips its first slot.
+#   push      a change to the chassis itself resolves the tools against it,
+#             so the chassis and the tools are never each proven only apart.
+#             The lock this job pushes uses GITHUB_TOKEN, and a push made
+#             with that token does not start a workflow run, so this cannot
+#             chase its own tail.
+#   manual    when you want it now.
 on:
-  repository_dispatch:
-    types: [ tool-updated ]
+  schedule:
+    - cron: "23 * * * *"
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 concurrency:
@@ -28,15 +42,6 @@ jobs:
       contents: write
 
     steps:
-      # The payload is our own, from our own repositories, but it is still
-      # input: it goes in the environment rather than into a shell line.
-      - name: Who asked
-        if: github.event_name == 'repository_dispatch'
-        env:
-          TOOL: ${{ github.event.client_payload.tool }}
-          MOVED_TO: ${{ github.event.client_payload.sha }}
-        run: echo "$TOOL moved to $MOVED_TO"
-
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
 
