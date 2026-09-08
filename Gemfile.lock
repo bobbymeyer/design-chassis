@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
   revision: 6abe7f4f1edf02070c6bbf6c2e7ad09af07c4501
-  tag: v0.6.0
+  branch: main
   specs:
     badger (0.6.0)
       rexml (~> 3.2)
@@ -18,7 +18,7 @@ GIT
 GIT
   remote: https://github.com/bobbymeyer/pandatone.git
   revision: ddf45b4eb5d0cb57a0edcf5444ecdf480695d0db
-  tag: v0.4.0
+  branch: main
   specs:
     pandatone (0.4.0)
       importmap-rails (>= 2.0, < 4)
@@ -30,8 +30,8 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/stripeclub.git
-  revision: ea755c60f0cf630a7b0c895463d2573a98375255
-  tag: v0.4.0
+  revision: 587165870c82457527f0c271a8893cca38a23eb7
+  branch: main
   specs:
     stripeclub (0.4.0)
       chunky_png (~> 1.4)
