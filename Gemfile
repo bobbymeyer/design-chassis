@@ -23,13 +23,13 @@ gem "bcrypt", "~> 3.1.7"
 # The tools. Each is a Rails engine packaged as a gem, taken from a tag of
 # its repository rather than from RubyGems; lib/chassis/engines.rb says
 # where each is mounted.
-gem "pandatone", github: "bobbymeyer/pandatone", branch: "swiss-1"
-gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "swiss-1"
+gem "pandatone", github: "bobbymeyer/pandatone", tag: "v0.4.0"
+gem "stripeclub", github: "bobbymeyer/stripeclub", tag: "v0.4.0"
 # Badger is two gems from one repository: the core (geometry and type
 # setting, plain Ruby) and the engine, which depends on the core at exactly
 # its own version. One git block takes both. Its type sidecar needs the
 # Python packages in requirements.txt; the Dockerfile installs them.
-git "https://github.com/bobbymeyer/badger", branch: "swiss-1" do
+git "https://github.com/bobbymeyer/badger", tag: "v0.6.0" do
   gem "badger"
   gem "badger-rails"
 end
