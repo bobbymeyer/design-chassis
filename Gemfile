@@ -26,8 +26,9 @@ gem "bcrypt", "~> 3.1.7"
 # rather than left off: with no ref at all, Bundler resolves whatever the
 # cached clone's HEAD happens to be. No tag, because Gemfile.lock is
 # committed and records the revision each tool is on, which is what makes a
-# deploy reproducible. `bundle update pandatone` moves one, and the lock's
-# diff is the record of when.
+# deploy reproducible. Nobody moves it by hand: .github/workflows/tools.yml
+# takes the tools as they are, runs the suite against them and pushes the
+# lock, so an update to any tool reaches the chassis on its own.
 gem "pandatone", github: "bobbymeyer/pandatone", branch: "main"
 gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "main"
 # Badger is two gems from one repository: the core (geometry and type
