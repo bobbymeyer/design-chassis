@@ -40,7 +40,9 @@ jobs:
       # 3, the release Active Support 8.1 still breaks on. Third-party gems
       # are a decision to make deliberately, not one to ride an hourly job.
       # bundler-cache sets frozen mode, under which Bundler refuses to write
-      # the lockfile at all — which is the one thing this job is for.
+      # the lockfile at all — which is the one thing this job is for. Every
+      # step that touches the bundle after this one has to say the same,
+      # since the lock it is reading is the one this job just rewrote.
       - name: Take the tools as they are now
         env:
           BUNDLE_FROZEN: "false"
@@ -58,16 +60,29 @@ jobs:
             git diff -- Gemfile.lock
           fi
 
+      # bundle update rewrites the lock but does not check out the revisions
+      # it wrote, so the gems the tests are about to load are not on disk yet.
+      - name: Check out what moved
+        if: steps.moved.outputs.moved == 'true'
+        env:
+          BUNDLE_FROZEN: "false"
+          BUNDLE_DEPLOYMENT: "false"
+        run: bundle install
+
       - name: Run tests
         if: steps.moved.outputs.moved == 'true'
         env:
           RAILS_ENV: test
+          BUNDLE_FROZEN: "false"
+          BUNDLE_DEPLOYMENT: "false"
         run: bin/rails db:test:prepare test
 
       - name: Run system tests
         if: steps.moved.outputs.moved == 'true'
         env:
           RAILS_ENV: test
+          BUNDLE_FROZEN: "false"
+          BUNDLE_DEPLOYMENT: "false"
         run: bin/rails db:test:prepare test:system
 
       - name: Keep screenshots from failed system tests
