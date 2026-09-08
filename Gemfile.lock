@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
-  revision: f2298f2a4e5fe7fd93078d58affa173a82d344c2
+  revision: 337776fb1202fe5b96f48e5c22d64363949254f5
   branch: main
   specs:
     badger (0.6.0)
