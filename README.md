@@ -39,7 +39,7 @@ In development the its-swiss specimen is at `/its-swiss/specimen`.
 | --- | --- |
 | The engine list | `lib/chassis/engines.rb` — the one place the chassis knows what it carries |
 | The bay | `/` — what is mounted, and where |
-| The tools | `/pandatone` — Pandatone, the palette library, from `bobbymeyer/pandatone`; `/stripeclub` — Stripeclub; `/badger` — Badger, the badge generator, two gems from one git block of `bobbymeyer/badger`. Each pinned to its tag |
+| The tools | `/pandatone` — Pandatone, the palette library, from `bobbymeyer/pandatone`; `/stripeclub` — Stripeclub; `/badger` — Badger, the badge generator, two gems from one git block of `bobbymeyer/badger`. Each taken from its default branch, with `Gemfile.lock` holding the revision |
 | The gallery | `/gallery`, behind the door and not in production: the same screen of every tool side by side, and the Badger editor in its last row, start to dress. `UI-ALIGNMENT.md` says what was aligned and where each pattern lives |
 | The mockups | `mockups/` — what a tool looked like before it was built, each with the generator that drew it. The gallery framed each board until its page arrived; they stay as the record |
 | The door | `app/controllers/{sessions,passwords,registrations}_controller.rb` for people, `api_controller.rb` for scripts, `accounts_controller.rb` for the token |
@@ -57,10 +57,12 @@ Mount.new(name: "Pandatone", path: "/pandatone", engine: "Pandatone::Engine")
 
 The routes mount it, the masthead links to it, and the bay lists it. The
 engine brings its own its-swiss dependency, its own stylesheets, its own
-migrations and its own tests; the chassis adds a gem to the Gemfile, pinned
-to a tag of the engine's repository (engines are not published to RubyGems),
-the line above, a `bin/rails db:migrate`, and a test in
-`test/lib/chassis/engines_test.rb` that asserts the mount.
+migrations and its own tests; the chassis adds a gem to the Gemfile, taken
+from the default branch of the engine's repository (engines are not
+published to RubyGems), the line above, a `bin/rails db:migrate`, and a test
+in `test/lib/chassis/engines_test.rb` that asserts the mount. `Gemfile.lock`
+is committed and holds the revision each engine is on, so a deploy is
+reproducible without a tag; `bundle update <engine>` is how one moves.
 
 What an engine gets from the chassis, and all it gets: a controller to
 inherit from for its screens and one for its API, both of which decide who is

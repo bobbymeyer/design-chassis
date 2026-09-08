@@ -20,16 +20,21 @@ gem "its-swiss", "~> 1.0"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
-# The tools. Each is a Rails engine packaged as a gem, taken from a tag of
-# its repository rather than from RubyGems; lib/chassis/engines.rb says
-# where each is mounted.
-gem "pandatone", github: "bobbymeyer/pandatone", tag: "v0.4.0"
-gem "stripeclub", github: "bobbymeyer/stripeclub", tag: "v0.4.0"
+# The tools. Each is a Rails engine packaged as a gem, taken from the
+# default branch of its repository rather than from RubyGems;
+# lib/chassis/engines.rb says where each is mounted. The branch is named
+# rather than left off: with no ref at all, Bundler resolves whatever the
+# cached clone's HEAD happens to be. No tag, because Gemfile.lock is
+# committed and records the revision each tool is on, which is what makes a
+# deploy reproducible. `bundle update pandatone` moves one, and the lock's
+# diff is the record of when.
+gem "pandatone", github: "bobbymeyer/pandatone", branch: "main"
+gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "main"
 # Badger is two gems from one repository: the core (geometry and type
 # setting, plain Ruby) and the engine, which depends on the core at exactly
 # its own version. One git block takes both. Its type sidecar needs the
 # Python packages in requirements.txt; the Dockerfile installs them.
-git "https://github.com/bobbymeyer/badger", tag: "v0.6.0" do
+git "https://github.com/bobbymeyer/badger", branch: "main" do
   gem "badger"
   gem "badger-rails"
 end
