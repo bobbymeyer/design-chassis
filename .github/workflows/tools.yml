@@ -39,7 +39,12 @@ jobs:
       # takes their dependencies too, which on the first run here meant json
       # 3, the release Active Support 8.1 still breaks on. Third-party gems
       # are a decision to make deliberately, not one to ride an hourly job.
+      # bundler-cache sets frozen mode, under which Bundler refuses to write
+      # the lockfile at all — which is the one thing this job is for.
       - name: Take the tools as they are now
+        env:
+          BUNDLE_FROZEN: "false"
+          BUNDLE_DEPLOYMENT: "false"
         run: bundle update --conservative pandatone stripeclub badger badger-rails
 
       - name: Has anything moved?
