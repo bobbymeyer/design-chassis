@@ -62,8 +62,11 @@ from the default branch of the engine's repository (engines are not
 published to RubyGems), the line above, a `bin/rails db:migrate`, and a test
 in `test/lib/chassis/engines_test.rb` that asserts the mount. `Gemfile.lock`
 is committed and holds the revision each engine is on, so a deploy is
-reproducible without a tag; `bundle update <engine>` is how one moves, and
-the lock's diff is the record of when. Name the branch rather than leaving
+reproducible without a tag. Nobody moves it by hand:
+`.github/workflows/tools.yml` runs hourly, takes the tools as they are, runs
+the suite against them and pushes the lock when it passes — so an update to
+any tool reaches the chassis on its own, and a tool that breaks it leaves
+main on the last good revision with a red run to look at. Name the branch rather than leaving
 the ref off: with no ref, Bundler resolves whatever the cached clone's HEAD
 happens to be, which is not necessarily the repository's default branch.
 

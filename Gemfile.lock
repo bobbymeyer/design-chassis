@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bobbymeyer/badger
-  revision: 6abe7f4f1edf02070c6bbf6c2e7ad09af07c4501
+  revision: 8c5642e4a255afaf13645521e79b3fae4ecd8374
   branch: main
   specs:
     badger (0.6.0)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/pandatone.git
-  revision: ddf45b4eb5d0cb57a0edcf5444ecdf480695d0db
+  revision: d34cc96eab06d2671d799d42a6cf3d045751e441
   branch: main
   specs:
     pandatone (0.4.0)
@@ -30,7 +30,7 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/stripeclub.git
-  revision: 587165870c82457527f0c271a8893cca38a23eb7
+  revision: 7e21a08a89fc11440a574400fe14179aa2199612
   branch: main
   specs:
     stripeclub (0.4.0)

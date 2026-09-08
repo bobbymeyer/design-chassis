@@ -1,0 +1,83 @@
+name: Tools
+
+# The chassis takes each tool from its main branch, and Gemfile.lock records
+# the revision Bundler resolved — which is what a deploy installs, since the
+# image is built with BUNDLE_DEPLOYMENT. So an update to a tool does not reach
+# the chassis until the lock moves. This moves it: takes the tools as they are
+# now, runs the suite against them, and pushes when it passes. Nobody bumps
+# anything, and a tool that breaks the chassis leaves main on the last good
+# revision with a red run to look at.
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: tools
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      # --conservative: move the tools and nothing else. Without it Bundler
+      # takes their dependencies too, which on the first run here meant json
+      # 3, the release Active Support 8.1 still breaks on. Third-party gems
+      # are a decision to make deliberately, not one to ride an hourly job.
+      - name: Take the tools as they are now
+        run: bundle update --conservative pandatone stripeclub badger badger-rails
+
+      - name: Has anything moved?
+        id: moved
+        run: |
+          if git diff --quiet -- Gemfile.lock; then
+            echo "moved=false" >> "$GITHUB_OUTPUT"
+            echo "The tools are where the lock already has them."
+          else
+            echo "moved=true" >> "$GITHUB_OUTPUT"
+            git diff -- Gemfile.lock
+          fi
+
+      - name: Run tests
+        if: steps.moved.outputs.moved == 'true'
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:test:prepare test
+
+      - name: Run system tests
+        if: steps.moved.outputs.moved == 'true'
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:test:prepare test:system
+
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
+
+      - name: Push the lock
+        if: steps.moved.outputs.moved == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Gemfile.lock
+          git commit -m "The tools as they are now"
+          git push
