@@ -1,0 +1,11 @@
+<%# locals: (project:) %>
+<%# One project in the tree. The indent is the depth, and the tag beside the
+    name is the whole of what the project is: everything else on the page is
+    what the tag found. %>
+<li class="project-tree__row" style="--depth: <%= project.depth %>">
+  <%= link_to project.name, project, class: "project-tree__name" %>
+  <span class="tag"><%= project_tag project.tag %></span>
+  <% if project.note.present? %>
+    <span class="project-tree__note"><%= project.note %></span>
+  <% end %>
+</li>

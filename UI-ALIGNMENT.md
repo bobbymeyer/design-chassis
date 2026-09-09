@@ -94,6 +94,50 @@ framed in this row until its page arrived and took its place; the boards
 stay as the record of what was drawn.
 The library's own specimen is at `/its-swiss/specimen` in development.
 
+## The fourth tool
+
+Projects arrived after this review and was built on its findings rather than
+against them, so there is nothing here to correct. What it drew, and where
+each thing was put:
+
+- **The page head, the filter block, the cards, the form builder, the flash
+  and the errors** are the library's, used as documented. The engine ships
+  one stylesheet, unlayered, and adds no token at all — the accent, the
+  typeface, the value scale, the field count and the baseline are the
+  chassis's, and a project lays out nothing that needs a number of its own.
+- **The tree** — a flat list indented by depth — is Projects's. A tree of
+  four things does not need a tree control, and no second tool has one.
+- **A thing from another tool, drawn small** is Projects's, and is the one
+  shape here nothing else has: a square figure carrying either a strip of
+  CSS colours or an image the tool already serves, at one field wide, six to
+  a row. It is a contact sheet, not a reading of any one piece.
+- **The subnav's `:sections` slot is left empty.** The chassis's subnav
+  already carries the tool's mark and its name, and this tool has one
+  destination — a link reading "Projects" under a mark reading "Projects" is
+  the same word twice. A tool fills that slot when it has surfaces to name.
+
+Two things it did to its siblings:
+
+- **Stripeclub's patterns grew tags**, because a project gathers by tag and
+  had nothing to gather. `Stripeclub::Taggable` is a copy of Pandatone's
+  concern, not an include of it: `Pandatone::Dresser` is published surface
+  because a consumer asks Pandatone for palettes, and nothing about a
+  pattern's tags asks Pandatone anything. If a third tool draws it, the home
+  is a small gem of its own — not the host, which holds no models, and not
+  its-swiss, which is a typographic style and not a place to keep SQL.
+- **`tag_links` and the `.tags` line are now at two applications**, so they
+  are a candidate for its-swiss under the rule above. Recorded as entry 8 in
+  Stripeclub's `ITS-SWISS-CANDIDATES.md`.
+
+And one thing this document had already said, which was written again
+anyway: **Badger read `--rule-hairline`, a token that does not exist, and
+every border fell through to its fallback.** The tags on a Stripeclub card
+were written asking for `--ink-2`, which does not exist either, and were set
+at the weight of a name until the page was looked at. The lesson is not in
+the table above until it is read before the CSS is written: the library's
+quiet ink is `--ink-quiet` and its shaded paper is `--paper-shaded`, and
+`its_swiss/tokens.css` is the list.
+
 ## What is left
 
 - its-swiss 0.8.0, Pandatone 0.2.0, Stripeclub 0.2.0 and Badger 0.2.0 are

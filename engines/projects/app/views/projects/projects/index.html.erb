@@ -1,0 +1,25 @@
+<%= page_head "Projects", lede: "A project is a name and a tag. What it holds is whatever the tools have tagged with it, so something joins a project by being tagged and leaves it the same way — there is no second list to keep in step." do %>
+  <%= link_to "Start a project", new_project_path, class: "button button--primary" %>
+<% end %>
+
+<div class="filters">
+  <%= search_form projects_path, frame: "projects" %>
+</div>
+
+<%= turbo_frame_tag "projects", data: { turbo_action: "replace" }, target: "_top" do %>
+  <% if @projects.any? %>
+    <%# A flat list, each project indented under the one above it: a tree of
+        four things does not need a tree control, and the indent says the
+        whole of what nesting means here. %>
+    <ul class="project-tree">
+      <%= render partial: "projects/projects/row", collection: @projects, as: :project %>
+    </ul>
+  <% elsif @total.zero? %>
+    <p class="empty">
+      No projects yet. A project gathers what the tools have already tagged —
+      <%= link_to "start one", new_project_path %> and give it the tag you have been writing.
+    </p>
+  <% else %>
+    <p class="empty">No projects match.</p>
+  <% end %>
+<% end %>

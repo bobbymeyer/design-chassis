@@ -1,0 +1,17 @@
+<%# locals: (item:) %>
+<%# One thing a tool has, as a project sees it: drawn small if the tool gave
+    us something to draw with, named, and linked into the tool that holds it.
+    The link leaves this page on purpose — a project is a reference, not a
+    copy, and the tool is where the thing is actually edited. %>
+<li class="card item-card">
+  <%= link_to item.path, class: "card__link" do %>
+    <% if item.drawable? %>
+      <%# Square, and cropped rather than fitted: a tile is one repeat of a
+          field that goes on forever, so a square cut out of it is the same
+          pattern. Fitting it letterboxes every tile that is not square. %>
+      <figure class="card__figure figure figure--cover" style="--ratio: 1"><%= item_figure item %></figure>
+    <% end %>
+    <span class="card__name"><%= item.name %></span>
+  <% end %>
+  <span class="card__meta"><%= item.source.name %></span>
+</li>

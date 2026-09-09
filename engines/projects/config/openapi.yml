@@ -1,0 +1,203 @@
+# The API, described. Served at api/v1/openapi and kept beside the routes it
+# describes; test/controllers/api/v1/openapi_test.rb fails when the two
+# disagree. The wire format is pinned longhand in contract_test.rb; this is
+# the same contract in the format every client generator reads.
+openapi: 3.1.0
+info:
+  title: Projects
+  version: "1"
+  summary: Named projects that gather what the other tools have tagged.
+  description: |
+    A project is a name and a tag. It holds nothing: what it shows is
+    whatever the tools around it answer when asked for that tag, so
+    something joins a project by being tagged in the tool that holds it, and
+    leaves it the same way.
+
+    Subprojects narrow. An item lands on the deepest project whose tags it
+    all carries — so under `bobbymeyerdotcom` with a subproject
+    `2026summer`, something tagged both is the subproject's and is not
+    repeated at the top, and something tagged only `2026summer` is in
+    neither, because a subproject narrows a project rather than standing
+    beside it.
+
+    Which tools a project gathers from is the host's to say, not this API's.
+    Every item names the source it came from and carries a path into the tool
+    that holds it, which is where it is actually read and edited.
+
+    Every request but this description carries a Bearer token issued by the
+    host application. A project is addressed by its tag, which is the same
+    string the tools match on, or by its id.
+servers:
+  - url: /projects/api/v1
+    description: Relative to the host the engine is mounted in, at its mount path.
+security:
+  - bearer: []
+tags:
+  - name: projects
+
+paths:
+  /openapi:
+    get:
+      operationId: openapi
+      summary: This document.
+      security: []
+      responses:
+        "200":
+          description: The OpenAPI description of this API.
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: Every project, the tree flat, each under the one above it.
+      responses:
+        "200":
+          description: Summaries. Nothing is gathered for an index, because gathering asks every tool a question.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProjectSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /projects/{key}:
+    parameters:
+      - $ref: "#/components/parameters/projectKey"
+    get:
+      operationId: showProject
+      tags: [projects]
+      summary: One project, with its subprojects and everything filed under it.
+      responses:
+        "200":
+          description: The project.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /projects/{key}/items:
+    parameters:
+      - $ref: "#/components/parameters/projectKey"
+    get:
+      operationId: listProjectItems
+      tags: [projects]
+      summary: What is filed here, without the tree above it.
+      responses:
+        "200":
+          description: The items, in the order the host registered the sources.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      description: A token issued by the host application.
+
+  parameters:
+    projectKey:
+      name: key
+      in: path
+      required: true
+      description: A project's tag, or its id.
+      schema:
+        type: string
+
+  responses:
+    Unauthorized:
+      description: No token, or a token the host does not know.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: No project by that tag or id.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    ProjectSummary:
+      type: object
+      required: [id, name, tag, note, parent, depth]
+      properties:
+        id: { type: integer }
+        name: { type: string, description: What a person calls it. Any characters. }
+        tag:
+          type: string
+          description: >-
+            One word, downcased, matched whole. The same string the tools this
+            gathers from match on, and the project's address.
+        note: { type: [string, "null"], description: A line about what this is. }
+        parent:
+          type: [string, "null"]
+          description: The tag of the project above this one, or null for a project of its own.
+        depth: { type: integer, description: How far down the tree this is. 0 is a project of its own. }
+    Project:
+      allOf:
+        - $ref: "#/components/schemas/ProjectSummary"
+        - type: object
+          required: [subprojects, items, unavailable]
+          properties:
+            subprojects:
+              type: array
+              items: { type: string }
+              description: The tags of the projects directly under this one.
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/Item"
+            unavailable:
+              type: array
+              description: >-
+                Sources that were asked and did not answer. Named rather than
+                left silent, so a short list can be told from a tool that is
+                down.
+              items:
+                type: object
+                required: [source, error]
+                properties:
+                  source: { type: string }
+                  error: { type: string }
+    Item:
+      type: object
+      required: [source, id, name, tags, path]
+      properties:
+        source: { type: string, description: Which tool this came from, as the host registered it. }
+        id: { description: The id the answering tool gave it. Its type is that tool's business. }
+        name: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+          description: Every tag it carries, which is more than the project's own.
+        path:
+          type: string
+          description: >-
+            Where to read it properly, in the tool that holds it. A project is
+            a reference and not a copy, so this is the point of the whole
+            record.
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }

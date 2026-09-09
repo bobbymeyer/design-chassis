@@ -1,0 +1,24 @@
+<%# The engine's layout is the host's layout with the engine's own things
+    added: its stylesheet, its destination, and the grid its pages are laid
+    out on. Everything else — the shell, the mark, the door — is the host's,
+    which is what makes this a tool inside an application rather than an
+    application of its own.
+
+    The host's layout is expected to render its-swiss's shell and to place
+    :sections in its masthead nav; the dummy application under test/ shows
+    the least a host has to do. %>
+
+<% content_for :head do %>
+  <%# Unlayered, like a host's own, so it wins over the library wherever the
+      two meet, whatever order they arrive in. %>
+  <%= stylesheet_link_tag "projects/components", "data-turbo-track": "reload" %>
+<% end %>
+
+<% content_for :main_class, "grid" %>
+
+<%# No :sections. The host's subnav already carries the tool's mark and its
+    name, and this tool has one destination — a second link reading "Projects"
+    under a mark reading "Projects" is the same word twice. A tool fills that
+    slot when it has surfaces to name, and this one does not. %>
+
+<%= render template: "layouts/application" %>

@@ -93,6 +93,43 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
 
+  # The engines in this repository are gems with their own dummy hosts and
+  # their own suites. The chassis's suite proves they work mounted; this
+  # proves each one works on its own, which is what makes extracting it later
+  # a matter of moving the directory.
+  engine-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        engine: [ projects ]
+
+    defaults:
+      run:
+        working-directory: engines/${{ matrix.engine }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: engines/${{ matrix.engine }}
+
+      # Two commands rather than one. An engine's bin/rails is
+      # rails/engine/commands, which takes the first token as the command and
+      # the rest as its arguments, so "db:test:prepare test" reaches it as a
+      # rake task with an unrecognized second command after it. An
+      # application's bin/rails passes both through to rake; this one does not.
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+        run: |
+          bin/rails db:test:prepare
+          bin/rails test
+
   system-test:
     runs-on: ubuntu-latest
 
