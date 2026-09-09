@@ -118,10 +118,17 @@ jobs:
           bundler-cache: true
           working-directory: engines/${{ matrix.engine }}
 
+      # Two commands rather than one. An engine's bin/rails is
+      # rails/engine/commands, which takes the first token as the command and
+      # the rest as its arguments, so "db:test:prepare test" reaches it as a
+      # rake task with an unrecognized second command after it. An
+      # application's bin/rails passes both through to rake; this one does not.
       - name: Run tests
         env:
           RAILS_ENV: test
-        run: bin/rails db:test:prepare test
+        run: |
+          bin/rails db:test:prepare
+          bin/rails test
 
   system-test:
     runs-on: ubuntu-latest
