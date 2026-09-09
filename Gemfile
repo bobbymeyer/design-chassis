@@ -30,10 +30,7 @@ gem "bcrypt", "~> 3.1.7"
 # take it when it merges, and .github/workflows/tools.yml takes the tools as
 # they are, runs the suite against them and pushes the lock.
 gem "pandatone", github: "bobbymeyer/pandatone", branch: "main"
-# Pinned to the branch that puts tags on a pattern, because Projects needs
-# them to gather one. Back to main when that merges, which is the convention
-# every cross-repo move in this family follows.
-gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "claude/funny-hopper-oksg86"
+gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "main"
 # Badger is two gems from one repository: the core (geometry and type
 # setting, plain Ruby) and the engine, which depends on the core at exactly
 # its own version. One git block takes both. Its type sidecar needs the

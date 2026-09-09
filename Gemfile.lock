@@ -30,8 +30,8 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/stripeclub.git
-  revision: 596096efb0a0d8409c8ac980ea14d0ad47a6577c
-  branch: claude/funny-hopper-oksg86
+  revision: df02bc03ee6127dd8456396d70e8d8e4e04d4719
+  branch: main
   specs:
     stripeclub (0.4.0)
       chunky_png (~> 1.4)
