@@ -20,12 +20,12 @@ class GalleryController < ApplicationController
   def show
     @screens = [
       screen("Index", "The page head, the filter block and the cards are the library's.",
-        "/pandatone/palettes", "/stripeclub/patterns", "/badger/badges"),
+        "/pandatone/palettes", "/stripeclub/patterns", "/badger/badges", "/projects"),
       screen("Compose", "Every form is the library's builder: a label, a control, a hint, the refusal.",
-        "/pandatone/palettes/new", "/stripeclub/patterns/new", "/badger/badges/new"),
-      screen("Dress", "The picker is Pandatone's dresser's, on every tool that wears a palette; Pandatone shows the palette itself.",
+        "/pandatone/palettes/new", "/stripeclub/patterns/new", "/badger/badges/new", "/projects/new"),
+      screen("Dress", "The picker is Pandatone's dresser's, on every tool that wears a palette; Pandatone shows the palette itself. A tool that wears none has no frame here, which is the honest answer rather than a stand-in.",
         first_palette_path, first_dress_path("/stripeclub/patterns", Stripeclub.patterns),
-        first_dress_path("/badger/badges", Badger.badges)),
+        first_dress_path("/badger/badges", Badger.badges), nil),
       Screen.new(name: "Editor",
         note: "The Badger editor: a badge started from a composition on a shape, composed as a drawing with its construction as the controls, and dressed.",
         frames: [

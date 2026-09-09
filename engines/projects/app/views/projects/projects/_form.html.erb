@@ -1,0 +1,24 @@
+<%# locals: (project:, submit_label:, cancel_to:) %>
+<%= its_swiss_form_with model: project, class: "form measure" do |form| %>
+  <%= render "its_swiss/shared/errors", record: project %>
+
+  <%= form.text_field :name, hint: "What you call this body of work. It can have spaces, punctuation, anything — the tag below is the part that has to match." %>
+
+  <%= form.text_field :tag, autocomplete: "off",
+        hint: "One word, no spaces. The tag you have been writing in the other tools. Everything carrying it turns up here, and nothing has to be added by hand." %>
+
+  <%= form.text_area :note, rows: 2, hint: "Optional. A line about what this is, shown under the title." %>
+
+  <%# A subproject narrows its parent: something has to carry the parent's tag
+      as well as this one to be filed here. That is worth saying on the form,
+      because it is the one thing about the shape that surprises people. %>
+  <%= form.collection_select :parent_id, Projects::Project.in_tree_order.reject { |other| other == project || project.descendants.include?(other) },
+        :id, ->(other) { "#{"— " * other.depth}#{other.name}" },
+        { include_blank: "None — a project of its own" },
+        hint: "Optional. A subproject only gathers what carries its parent's tags too, so something tagged with this alone will not appear anywhere." %>
+
+  <div class="run">
+    <%= form.submit submit_label %>
+    <%= link_to "Cancel", cancel_to, class: "button button--quiet" %>
+  </div>
+<% end %>

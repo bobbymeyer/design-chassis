@@ -30,7 +30,10 @@ gem "bcrypt", "~> 3.1.7"
 # take it when it merges, and .github/workflows/tools.yml takes the tools as
 # they are, runs the suite against them and pushes the lock.
 gem "pandatone", github: "bobbymeyer/pandatone", branch: "main"
-gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "main"
+# Pinned to the branch that puts tags on a pattern, because Projects needs
+# them to gather one. Back to main when that merges, which is the convention
+# every cross-repo move in this family follows.
+gem "stripeclub", github: "bobbymeyer/stripeclub", branch: "claude/funny-hopper-oksg86"
 # Badger is two gems from one repository: the core (geometry and type
 # setting, plain Ruby) and the engine, which depends on the core at exactly
 # its own version. One git block takes both. Its type sidecar needs the
@@ -39,8 +42,24 @@ git "https://github.com/bobbymeyer/badger", branch: "main" do
   gem "badger"
   gem "badger-rails"
 end
+# Projects: named projects that gather what the other tools have tagged.
+# A path gem rather than a repository of its own — it is a whole mountable
+# engine, with its own namespace, tables, dummy host and suite, and
+# extracting it is moving the directory and changing this line. It lives here
+# because it has one host and nothing else consumes it yet.
+#
+# It could not live in the chassis proper: it needs a table, a model and
+# views, and test/architecture/thin_chassis_test.rb refuses all three. That
+# is the guard working, not a rule to loosen.
+gem "projects", path: "engines/projects"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
+# json 3.0.0 (7 September 2026) changed the signature of JSON.parse, and
+# Active Support 8.1.3.1 still calls it the old way: a signed cookie, a JSON
+# column and a schema load all raise. Every engine in this family already
+# holds it below 3 in its own Gemfile; the chassis only avoided it by not
+# having re-resolved since. Below 3 until a Rails that takes it.
+gem "json", "< 3"
 
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

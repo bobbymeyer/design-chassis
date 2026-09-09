@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_08_100001) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_130001) do
   create_table "badger_badges", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -100,6 +100,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_100001) do
     t.index "LOWER(name)", name: "index_pandatone_palettes_on_lower_name", unique: true
   end
 
+  create_table "projects_projects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.text "note"
+    t.integer "parent_id"
+    t.string "tag", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_projects_projects_on_parent_id"
+    t.index ["tag"], name: "index_projects_projects_on_tag", unique: true
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -148,6 +159,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_100001) do
     t.string "name", null: false
     t.decimal "row_depth", precision: 9, scale: 6, default: "1.0", null: false
     t.integer "slot_count", default: 1, null: false
+    t.json "tags", default: [], null: false
     t.datetime "updated_at", null: false
   end
 
@@ -222,6 +234,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_100001) do
   add_foreign_key "badger_slot_rules", "badger_colorways", column: "colorway_id"
   add_foreign_key "pandatone_palette_colors", "pandatone_colors", column: "color_id"
   add_foreign_key "pandatone_palette_colors", "pandatone_palettes", column: "palette_id"
+  add_foreign_key "projects_projects", "projects_projects", column: "parent_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "stripeclub_colorways", "stripeclub_patterns", column: "pattern_id"
   add_foreign_key "stripeclub_imperfections", "stripeclub_patterns", column: "pattern_id"

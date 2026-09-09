@@ -40,6 +40,8 @@ In development the its-swiss specimen is at `/its-swiss/specimen`.
 | The engine list | `lib/chassis/engines.rb` — the one place the chassis knows what it carries |
 | The bay | `/` — what is mounted, and where |
 | The tools | `/pandatone` — Pandatone, the palette library, from `bobbymeyer/pandatone`; `/stripeclub` — Stripeclub; `/badger` — Badger, the badge generator, two gems from one git block of `bobbymeyer/badger`. Each taken from its default branch, with `Gemfile.lock` holding the revision |
+| The tools in this repository | `engines/projects` — Projects, taken as a path gem. A whole mountable engine with its own namespace, tables, dummy host and suite; it lives here because it has one host and nothing else consumes it yet, and extracting it is moving the directory |
+| What a project gathers from | `config/initializers/projects.rb` — one source per tool, each an engine method call plus glue. The second place in the chassis that knows about more than one tool, and the only one that reads them |
 | The gallery | `/gallery`, behind the door and not in production: the same screen of every tool side by side, and the Badger editor in its last row, start to dress. `UI-ALIGNMENT.md` says what was aligned and where each pattern lives |
 | The mockups | `mockups/` — what a tool looked like before it was built, each with the generator that drew it. The gallery framed each board until its page arrived; they stay as the record |
 | The door | `app/controllers/{sessions,passwords,registrations}_controller.rb` for people, `api_controller.rb` for scripts, `accounts_controller.rb` for the token |
@@ -79,6 +81,20 @@ nav; and a theme. Pandatone's README says the same from the other side.
 
 A gem the chassis calls but does not serve — `Pandatone.palette(id)` from a
 workflow, say — is bundled and not listed. The list is what has a page.
+
+## An engine that lives here
+
+`engines/projects` is a path gem in this repository rather than one of its
+own. It is a whole engine by every other measure — its own namespace, its
+own `projects_` tables, its own gemspec depending on no tool, its own dummy
+host and suite, its own OpenAPI description — and `.github/workflows/ci.yml`
+runs that suite beside the chassis's, so it is held to booting on its own.
+Extracting it is `git mv` and one line of the Gemfile.
+
+It is here because it has one host and nothing else consumes it. It is not
+in the chassis proper because it cannot be: a table, a model and views each
+fail the thinness guard, and the guard is right. A tool too small for a
+repository is still too big for the chassis.
 
 ## What stays out
 

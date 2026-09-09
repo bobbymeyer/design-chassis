@@ -1,0 +1,73 @@
+<% content_for :title, @project.name %>
+
+<%= page_head @project.name, lede: @project.note.presence do %>
+  <%= link_to "Add a subproject", new_project_path(parent: @project.tag), class: "button" %>
+  <%= link_to "Edit", edit_project_path(@project), class: "button button--quiet" %>
+  <%# The one thing here that cannot be undone, in the head with the rest of
+      what is done on this page, which is where every tool in the family puts
+      it. A project holds nothing, so what it says is what taking it away
+      actually costs: nothing but the project. %>
+  <%= button_to "Take away", @project, method: :delete, class: "button button--danger",
+        form: { data: { turbo_confirm: "Take #{@project.name} away? Nothing it gathered moves — every tag stays exactly where it is." } } %>
+<% end %>
+
+<%# Where this sits, and what it takes. Said once, at the top, because every
+    question the rest of the page answers starts here. %>
+<p class="project-line">
+  <% if @project.ancestors.any? %>
+    <%= project_trail @project %> /
+  <% end %>
+  <span class="tag"><%= project_tag @project.tag %></span>
+  <% if @project.required_tags.many? %>
+    <span class="hint">— everything here carries all of <%= @project.required_tags.map { |tag| project_tag(tag) }.to_sentence(last_word_connector: " and ") %>.</span>
+  <% end %>
+</p>
+
+<% if @subprojects.any? %>
+  <section class="subprojects">
+    <h2>Subprojects</h2>
+    <p class="hint">Something carrying a subproject's whole line of tags is filed there rather than here.</p>
+
+    <ul class="grid cards subproject-cards">
+      <% @subprojects.each do |subproject| %>
+        <li class="card subproject-card">
+          <%= link_to subproject, class: "card__link" do %>
+            <span class="card__name"><%= subproject.name %></span>
+          <% end %>
+          <span class="card__meta"><%= project_tag subproject.tag %> · <%= gathered_count subproject.items.size %></span>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>
+
+<%# One section per tool, in the order the host registered them, so the page
+    reads as "here is this project in Pandatone, here it is in Stripeclub"
+    rather than as one undifferentiated pile. %>
+<% @readings.each do |reading| %>
+  <section class="gathered" id="source-<%= reading.source.key %>">
+    <h2>
+      <% if reading.source.mark.present? %><span class="glyph" aria-hidden="true"><%= reading.source.mark %></span> <% end %>
+      <%= reading.source.name %>
+    </h2>
+
+    <% if reading.down? %>
+      <%# A tool that did not answer says so. A quietly short list is worse
+          than one that explains itself. %>
+      <p class="empty">Nothing came back from <%= reading.source.name %>. <span class="hint"><%= reading.error %></span></p>
+    <% elsif reading.items.any? %>
+      <ul class="grid cards item-cards">
+        <%= render partial: "projects/projects/item", collection: reading.items, as: :item %>
+      </ul>
+    <% else %>
+      <p class="empty">Nothing here carries <%= project_tag @project.tag %> yet.</p>
+    <% end %>
+  </section>
+<% end %>
+
+<% if @readings.empty? %>
+  <p class="empty">
+    Nothing is registered to gather from. A host mounts its tools and registers
+    one source per tool; until it does, a project is a name and a tag.
+  </p>
+<% end %>

@@ -8,6 +8,7 @@ The first vertical slice works end to end. Pandatone is a gem-packaged mountable
 
 Badger is the first engine with a sidecar: its type setting runs HarfBuzz and fontTools in a `python3` subprocess. The chassis's part is the interpreter and the packages, installed by the Dockerfile from `requirements.txt` (a hand-kept copy of the gem's), and `Badger.font_directories` pointing at the fonts the shell already ships. `bin/rails badger:doctor` says whether it can run.
 
+- Projects (`📽️`, `/projects`) is the fourth tool and the first to live in this repository, as `engines/projects`, taken as a path gem. A project is a name and a tag; what it shows is whatever the tools answer when asked for that tag, and an item lands on the deepest project whose tags it all carries. It depends on no tool and names none: `config/initializers/projects.rb` registers one source per tool, which is the chassis doing the one thing only the chassis may do. Stripeclub grew tags on a pattern so it could be gathered.
 - The engine list is `lib/chassis/engines.rb`. The routes mount what it lists; the nav and the bay link to it. Nothing else reads it. An engine's migrations run with the chassis's through the engine's own initializer; nothing is copied in.
 - `test/architecture/thin_chassis_test.rb` is the scale the chassis is weighed on: only the auth models, only the auth tables plus the engines' own prefixed ones, no queries outside the auth files, no engine internals named anywhere, no color arithmetic or SVG. A failure there means a capability has gone homeless: move it into an engine, do not loosen the test.
 - The door is the chassis's, for people and for scripts. `ApplicationController` authenticates a session; `ApiController` authenticates the account's API token, shown and regenerated on `/account`. An engine's controllers inherit from these two (`Pandatone.base_controller_class`, `Pandatone.api_base_controller_class`) and never learn what a user is.
@@ -25,6 +26,14 @@ For the next engine, in the order the problems appeared:
 5. The engine's JavaScript registers its own Stimulus controllers from a module the engine's layout imports; the host adds nothing to its importmap. The host registers the library's two, `its-swiss-clipboard` and `its-swiss-live-search`, once.
 6. A pattern enters its-swiss after two engines have drawn it, and a pattern that reads a palette enters Pandatone when a second consumer copies it. Stripeclub's `ITS-SWISS-CANDIDATES.md` and the chassis's `UI-ALIGNMENT.md` are where that is recorded.
 
+### What Projects added to that list
+
+7. **An engine can live in this repository.** A tool too small for a repository of its own is still too big for the chassis — it needed a table, a model and views, and the thinness guard refuses all three. `engines/<name>`, a path gem, with its own dummy host and its own CI job, is the answer; extracting it later is `git mv`. Do not reach for it before the guard has actually refused something.
+8. **A seam is a list the host fills, not a dependency the engine declares.** Projects gathers from Pandatone and Stripeclub and its gemspec names neither. `Projects.source` takes a key, a name and a block; the block takes one tag and answers with plain hashes. A source that raises is a source that is down, reported on the page, never a page that is broken.
+9. **Register sources from an initializer, so the value objects live in `lib`.** Autoloading a constant while the application is still initializing is not allowed, so `Projects::Source` and `Projects::Item` are required rather than autoloaded — the same reason `lib/pandatone/dresser.rb` is.
+10. **`allow_blank: true` applies to every validator in the call it is written on.** On the same line as `presence: true` it cancels it, silently.
+11. **Check the tokens exist.** `--ink-2` is not one of its-swiss's; it fell through to the inherited ink and the tags were set at the weight of a name. The library's quiet ink is `--ink-quiet` and its shaded paper is `--paper-shaded`. `UI-ALIGNMENT.md` already had this exact entry for Badger's `--rule-hairline`; it was written again anyway. Read `its_swiss/tokens.css` before using a token.
+
 ## Context
 
 Existing tools, all standalone Rails apps or gems today:
@@ -34,6 +43,7 @@ Existing tools, all standalone Rails apps or gems today:
 | **Pandatone** | Color palette library manager. Named/tagged colors, palettes queryable over REST. The keystone — everything else consumes it | Built and working. Ad hoc REST, no OpenAPI spec yet |
 | **Stripeclub** | Stripe pattern generator consuming Pandatone palettes. Value-first design (grayscale slots), palettes applied as swappable colorways | ~80% built |
 | **its-swiss** | Shared Swiss International Typographic Style gem: CSS standards + basic components (nav, page head, filters, cards, footer, grid primitives — apps define their own grids) | 0.8.0 on a branch, 0.7.2 on RubyGems. Every engine and the chassis consume it |
+| **Projects** | Named projects, and subprojects, gathering what the other tools have tagged. A reference board, never a copy | Built. `engines/projects` in this repository, mounted at `/projects` |
 | **morgue** | Segmented, color-indexed reference archive (Pinterest-style) | Separate app, migrates later |
 
 ## Stack and conventions (non-negotiable)

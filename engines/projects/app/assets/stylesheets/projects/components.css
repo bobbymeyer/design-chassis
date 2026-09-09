@@ -1,0 +1,139 @@
+/* Projects — what this tool lays out, and nothing else.
+ *
+ * The shell, the page head, the filter block, the cards, the buttons and the
+ * form are its-swiss's; the typeface, the accent and the greys are the host's.
+ * What is here is the two shapes a project has that no other tool does: a
+ * tree read as an indented list, and a thing from another tool drawn small
+ * enough to recognise.
+ *
+ * Unlayered on purpose, like a host's own stylesheet: these win wherever they
+ * meet the library, without out-specifying it. */
+
+/* --- The grid ------------------------------------------------------------
+   Which blocks take which fields, on the host's six. The other tools keep
+   this in a tokens.css of its own; this one has a grid and no tokens — the
+   accent, the typeface, the value scale and the field count are all the
+   host's, and there is nothing a project lays out that needs a number of its
+   own — so it is a section here rather than a second file to open.
+
+   A card one field wide, six to a row: a contact sheet. This page is for
+   seeing a body of work at once and recognising a piece, not for reading any
+   one of them — the tool that holds it is one click away for that — so the
+   density is the same as Pandatone's colour index rather than its palette
+   index. Two fields put three enormous squares on a page that had four
+   things on it.
+
+   The subprojects run the same fields, so the two lists line up. */
+.item-cards,
+.subproject-cards { --card: 1; }
+
+@media (max-width: 48rem) {
+  .item-cards,
+  .subproject-cards { --card: 2; }
+}
+
+@media (max-width: 34rem) {
+  .item-cards,
+  .subproject-cards { --card: 3; }
+}
+
+/* --- The tree ------------------------------------------------------------
+   A tree of four things does not need a tree control. The indent is the
+   depth and says the whole of what nesting means here; the rule under each
+   row is the library's, so the list reads as a list. */
+.project-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: var(--rule-hair) solid var(--rule);
+}
+
+.project-tree__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  /* The indent is the only thing saying this is under that, so it is a whole
+     step rather than a hairline nudge. */
+  padding-inline-start: calc(var(--depth) * var(--space-4));
+  border-bottom: var(--rule-hair) solid var(--rule);
+}
+
+.project-tree__name { font-weight: 600; }
+
+.project-tree__note {
+  color: var(--ink-quiet);
+  font-size: var(--size-1);
+}
+
+/* --- The line a project sits on -----------------------------------------
+   Where you are in the tree and what this project takes, said once, above
+   everything the tag found. */
+.project-line {
+  /* No margin under it: the section below carries its own space above, and
+     two of them read as a hole in the page. */
+  margin-block: 0;
+  font-size: var(--size-1);
+  line-height: var(--space-3);
+}
+
+.project-line .tag,
+.project-tree .tag {
+  color: var(--ink-quiet);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- What was gathered ---------------------------------------------------
+   One section per tool, so the page reads as "here is this project in
+   Pandatone, here it is in Stripeclub" rather than as one pile. */
+.gathered,
+.subprojects {
+  margin-block-start: var(--line-2);
+}
+
+.gathered h2,
+.subprojects h2 {
+  padding-block-end: var(--space-1);
+  border-bottom: var(--rule-heavy, 2px) solid var(--ink);
+}
+
+/* A thing from another tool, drawn small. The figure is square whatever the
+   tool gave us, so a strip of colour and a tile of pattern sit on the same
+   line and compare. */
+.item-card .card__figure {
+  overflow: hidden;
+  background: var(--paper-shaded);
+}
+
+/* The library sizes a figure's picture itself — the width over --ratio,
+   rounded up to a whole line — so nothing here sets its height. An earlier
+   `height: 100%` collapsed it, because a container-type: inline-size box has
+   no height of its own to be a percentage of.
+
+   The figure is .figure--cover, which is the library's way of saying the
+   application owns the picture and may crop it. It does here: a tile is one
+   repeat of a field that goes on forever, so a square cut out of it is the
+   same pattern, and fitting it instead letterboxed every tile that was not
+   square against a grey half-card. */
+.item-card .item__image { display: block; }
+
+/* A palette, as the strip it is: equal columns edge to edge, no gaps and no
+   labels. At this size it is a swatch of the whole thing and not a reading
+   of any one colour — the tool that holds it is one click away for that. */
+/* A span, not an img, so the library does not size it: it takes its own
+   square from the ratio the card declares. Equal columns edge to edge, no
+   gaps and no labels — at this size it is a swatch of the whole palette and
+   not a reading of any one colour, and the tool that holds it is one click
+   away for that. */
+.item__swatches {
+  display: flex;
+  inline-size: 100%;
+  aspect-ratio: var(--ratio, 1);
+}
+
+.item__swatch {
+  flex: 1;
+  background: var(--swatch);
+}
+
+.subproject-card .card__meta { color: var(--ink-quiet); }

@@ -93,6 +93,36 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
 
+  # The engines in this repository are gems with their own dummy hosts and
+  # their own suites. The chassis's suite proves they work mounted; this
+  # proves each one works on its own, which is what makes extracting it later
+  # a matter of moving the directory.
+  engine-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        engine: [ projects ]
+
+    defaults:
+      run:
+        working-directory: engines/${{ matrix.engine }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: engines/${{ matrix.engine }}
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:test:prepare test
+
   system-test:
     runs-on: ubuntu-latest
 

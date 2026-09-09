@@ -26,7 +26,8 @@ module Chassis
     ALL = [
       Mount.new(name: "Pandatone", mark: "🐼", path: "/pandatone", engine: "Pandatone::Engine"),
       Mount.new(name: "Stripeclub", mark: "🦓", path: "/stripeclub", engine: "Stripeclub::Engine"),
-      Mount.new(name: "Badger", mark: "🦡", path: "/badger", engine: "Badger::Engine")
+      Mount.new(name: "Badger", mark: "🦡", path: "/badger", engine: "Badger::Engine"),
+      Mount.new(name: "Projects", mark: "📽️", path: "/projects", engine: "Projects::Engine")
     ].freeze
 
     def self.all = ALL
