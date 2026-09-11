@@ -59,7 +59,7 @@ gem "jbuilder"
 # column and a schema load all raise. Every engine in this family already
 # holds it below 3 in its own Gemfile; the chassis only avoided it by not
 # having re-resolved since. Below 3 until a Rails that takes it.
-gem "json", "< 3"
+gem "json", "< 4"
 
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
