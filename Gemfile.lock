@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/bobbymeyer/pandatone.git
-  revision: 60f28faf992621900e2b6b77c56cf838301150c5
+  revision: 7533af9970d241e74c99d8b0cf5c7394ba34ced9
   branch: main
   specs:
     pandatone (0.4.0)
